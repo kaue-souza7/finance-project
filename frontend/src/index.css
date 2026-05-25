@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --spacing-section: 1.5rem;
+    --spacing-card: 1.5rem;
+    --size-text: 1rem;
+    --size-icon: 1.25rem;
+    color-scheme: light;
+  }
+
+  :root.dark {
+    color-scheme: dark;
+  }
+
+  :root[data-density="compact"] {
+    --spacing-section: 1rem;
+    --spacing-card: 1rem;
+    --size-text: 0.875rem;
+    --size-icon: 1rem;
+  }
+
+  html {
+    @apply antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html.no-scroll {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+
+  @keyframes skeleton {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+  }
+
+  .animate-skeleton {
+    animation: skeleton 1.5s ease-in-out infinite;
+  }
+
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateY(0.75rem); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-toast {
+    animation: toast-in 0.25s ease-out;
+  }
+
+  body {
+    @apply bg-surface text-slate-900 transition-colors duration-200;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  :root.dark body {
+    @apply bg-surface-dark text-slate-100;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font-size: 16px;
+  }
+}
