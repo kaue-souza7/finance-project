@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Plus, Receipt } from "lucide-react";
 import { ExpenseCard } from "@/components/ExpenseCard";
 import { ExpenseForm } from "@/components/ExpenseForm";
+import { MonthSelector } from "@/components/MonthSelector";
 import { SkeletonCard } from "@/components/Skeleton";
 import { Toast } from "@/components/Toast";
 import { planningApi } from "@/services/planning";
 import { expenseApi } from "@/services/expense";
+import { getCurrentMonth, nextMonth, prevMonth } from "@/utils/date";
 import type {
   ExpenseCreate,
   ExpenseResponse,
@@ -14,6 +17,25 @@ import type {
 } from "@/types/finance";
 
 export function Transactions() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const defaultDate = getCurrentMonth();
+  const rawMonth = searchParams.get("month");
+  const rawYear = searchParams.get("year");
+
+  let month = defaultDate.month;
+  let year = defaultDate.year;
+
+  if (rawMonth) {
+    const n = parseInt(rawMonth, 10);
+    if (Number.isFinite(n) && n >= 1 && n <= 12) month = n;
+  }
+
+  if (rawYear) {
+    const n = parseInt(rawYear, 10);
+    if (Number.isFinite(n) && n >= 2020 && n <= 2100) year = n;
+  }
+
   const [plan, setPlan] = useState<PlanningResponse | null>(null);
   const [expenses, setExpenses] = useState<ExpenseResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,14 +47,10 @@ export function Transactions() {
     variant: "success" | "error";
   } | null>(null);
 
-  const today = new Date();
-  const currentMonth = today.getMonth() + 1;
-  const currentYear = today.getFullYear();
-
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const p = await planningApi.getByMonth(currentMonth, currentYear);
+      const p = await planningApi.getByMonth(month, year);
       setPlan(p);
       if (p) {
         const exps = await expenseApi.list(p.id);
@@ -48,11 +66,27 @@ export function Transactions() {
     } finally {
       setLoading(false);
     }
-  }, [currentMonth, currentYear]);
+  }, [month, year]);
 
   useEffect(() => {
     load();
   }, [load]);
+
+  const handlePrevMonth = useCallback(() => {
+    const target = prevMonth(month, year);
+    const params = new URLSearchParams(window.location.search);
+    params.set("month", String(target.month));
+    params.set("year", String(target.year));
+    setSearchParams(params);
+  }, [month, year, setSearchParams]);
+
+  const handleNextMonth = useCallback(() => {
+    const target = nextMonth(month, year);
+    const params = new URLSearchParams(window.location.search);
+    params.set("month", String(target.month));
+    params.set("year", String(target.year));
+    setSearchParams(params);
+  }, [month, year, setSearchParams]);
 
   const handleCreate = async (data: ExpenseCreate | ExpenseUpdate) => {
     setSaving(true);
@@ -115,27 +149,30 @@ export function Transactions() {
 
   return (
     <section className="mx-auto max-w-3xl">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
+      <div className="mb-6 space-y-4">
+        <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
             Despesas
           </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            {currentMonth}/{currentYear}
-          </p>
+          {plan && (
+            <button
+              onClick={() => {
+                setEditExpense(null);
+                setShowForm(!showForm);
+              }}
+              className="flex min-h-[44px] items-center gap-2 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+            >
+              <Plus size={18} />
+              Nova
+            </button>
+          )}
         </div>
-        {plan && (
-          <button
-            onClick={() => {
-              setEditExpense(null);
-              setShowForm(!showForm);
-            }}
-            className="flex min-h-[44px] items-center gap-2 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
-          >
-            <Plus size={18} />
-            Nova
-          </button>
-        )}
+        <MonthSelector
+          month={month - 1}
+          year={year}
+          onPrev={handlePrevMonth}
+          onNext={handleNextMonth}
+        />
       </div>
 
       {(showForm || editExpense) && plan && (

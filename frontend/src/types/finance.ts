@@ -108,3 +108,18 @@ export interface ExpenseUpdate {
   due_date?: string;
   paid?: boolean;
 }
+
+export interface MonthlyInvestment {
+  month: number;
+  year: number;
+  label: string;
+  invested: string;
+}
+
+export interface InvestmentSummary {
+  total_invested: string;
+  total_months: number;
+  average_monthly: string;
+  best_month: MonthlyInvestment | null;
+  monthly_breakdown: MonthlyInvestment[];
+}

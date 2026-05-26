@@ -5,6 +5,7 @@ from app.api.v1.auth import router as auth_router
 from app.api.v1.health import router as health_router
 from app.api.v1.categories import router as categories_router
 from app.api.v1.expenses import router as expenses_router
+from app.api.v1.investments import router as investments_router
 from app.api.v1.plannings import router as plannings_router
 
 
@@ -24,6 +25,7 @@ def create_app() -> FastAPI:
     app.include_router(plannings_router, prefix="/api/v1")
     app.include_router(expenses_router, prefix="/api/v1")
     app.include_router(categories_router, prefix="/api/v1")
+    app.include_router(investments_router, prefix="/api/v1")
 
     return app
 

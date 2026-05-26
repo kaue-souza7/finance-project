@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import {
   CalendarCheck,
   LayoutDashboard,
+  PiggyBank,
   Settings,
   Tags,
   Wallet,
@@ -12,6 +13,7 @@ import {
 const links = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
   { to: "/plannings", label: "Planejamentos", icon: CalendarCheck },
+  { to: "/investments", label: "Investimentos", icon: PiggyBank },
   { to: "/transactions", label: "Transações", icon: Wallet },
   { to: "/categories", label: "Categorias", icon: Tags },
 ];

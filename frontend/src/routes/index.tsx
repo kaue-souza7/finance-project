@@ -3,6 +3,7 @@ import { AppLayout } from "@/layouts/AppLayout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Categories } from "@/pages/Categories";
 import { Dashboard } from "@/pages/Dashboard";
+import { Investments } from "@/pages/Investments";
 import { Login } from "@/pages/Login";
 import { Plannings } from "@/pages/Plannings";
 import { Register } from "@/pages/Register";
@@ -19,6 +20,7 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <Dashboard /> },
       { path: "plannings", element: <Plannings /> },
+      { path: "investments", element: <Investments /> },
       { path: "transactions", element: <Transactions /> },
       { path: "categories", element: <Categories /> },
       { path: "settings", element: <Settings /> },
