@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import type { LoginRequest, RegisterRequest, TokenResponse, UserResponse } from "@/types/finance";
 
-const AUTH_URL = "/api/v1/auth";
+const BASE_API = import.meta.env.VITE_API_URL ?? "/api/v1";
+const AUTH_URL = `${BASE_API}/auth`;
 
 interface AuthContextValue {
   user: UserResponse | null;
