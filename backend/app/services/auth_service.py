@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.core.security import create_access_token, hash_password, verify_password
 from app.repositories.user_repository import UserRepository
-from app.schemas.auth import LoginRequest, UserCreate, UserResponse
+from app.schemas.auth import LoginRequest, TokenResponse, UserCreate, UserResponse
 
 
 class AuthService:
@@ -11,7 +11,7 @@ class AuthService:
         self.db = db
         self.repo = UserRepository()
 
-    def register(self, data: UserCreate) -> UserResponse:
+    def register(self, data: UserCreate) -> TokenResponse:
         existing = self.repo.get_by_email(self.db, data.email)
         if existing:
             raise HTTPException(
@@ -21,7 +21,8 @@ class AuthService:
 
         hashed = hash_password(data.password)
         user = self.repo.create(self.db, data, hashed)
-        return UserResponse.model_validate(user)
+        token = create_access_token(data={"sub": str(user.id)})
+        return TokenResponse(access_token=token)
 
     def login(self, data: LoginRequest) -> str:
         user = self.repo.get_by_email(self.db, data.email)

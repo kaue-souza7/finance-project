@@ -106,11 +106,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const register = useCallback(async (data: RegisterRequest) => {
-    await authFetch<UserResponse>("/register", data);
-    const tokenRes = await authFetch<TokenResponse>("/login", {
-      email: data.email,
-      password: data.password,
-    });
+    const tokenRes = await authFetch<TokenResponse>("/register", data);
     setToken(tokenRes.access_token);
     const me = await authFetch<UserResponse>("/me");
     setUser(me);
