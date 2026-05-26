@@ -3,7 +3,7 @@ from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 from app.core.config import settings
 
-engine = create_engine(settings.DATABASE_URL)
+engine = create_engine(settings.database_url_normalized)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
