@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Copy, Plus, Receipt } from "lucide-react";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
@@ -16,6 +16,8 @@ import type {
   ExpenseUpdate,
   PlanningResponse,
 } from "@/types/finance";
+
+type SortOption = "name-asc" | "name-desc" | "amount-asc" | "amount-desc";
 
 export function Transactions() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -49,6 +51,7 @@ export function Transactions() {
   } | null>(null);
   const [copying, setCopying] = useState(false);
   const [showCopyConfirm, setShowCopyConfirm] = useState(false);
+  const [sortBy, setSortBy] = useState<SortOption>("name-asc");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -148,7 +151,7 @@ export function Transactions() {
   const handleCopyFromPrevious = async () => {
     setCopying(true);
     try {
-      await planningApi.copyFromPrevious(month, year);
+      await expenseApi.copyFromPrevious(month, year);
       setShowCopyConfirm(false);
       setToast({
         message: "Despesas copiadas com sucesso",
@@ -171,6 +174,21 @@ export function Transactions() {
     (acc, e) => acc + Number(e.amount),
     0,
   );
+
+  const sortedExpenses = useMemo(() => {
+    return [...expenses].sort((a, b) => {
+      switch (sortBy) {
+        case "name-asc":
+          return a.description.localeCompare(b.description, "pt-BR");
+        case "name-desc":
+          return b.description.localeCompare(a.description, "pt-BR");
+        case "amount-asc":
+          return Number(a.amount) - Number(b.amount);
+        case "amount-desc":
+          return Number(b.amount) - Number(a.amount);
+      }
+    });
+  }, [expenses, sortBy]);
 
   return (
     <section className="mx-auto max-w-3xl">
@@ -288,6 +306,56 @@ export function Transactions() {
         </div>
       )}
 
+      {plan && !loading && expenses.length > 0 && (
+        <div className="mb-4 rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800/50">
+          <p className="mb-3 text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Ordenar por
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            <button
+              onClick={() => setSortBy("name-asc")}
+              className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                sortBy === "name-asc"
+                  ? "border-slate-900 bg-slate-900 text-white dark:border-white dark:bg-white dark:text-slate-900"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
+              }`}
+            >
+              Nome A-Z
+            </button>
+            <button
+              onClick={() => setSortBy("name-desc")}
+              className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                sortBy === "name-desc"
+                  ? "border-slate-900 bg-slate-900 text-white dark:border-white dark:bg-white dark:text-slate-900"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
+              }`}
+            >
+              Nome Z-A
+            </button>
+            <button
+              onClick={() => setSortBy("amount-asc")}
+              className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                sortBy === "amount-asc"
+                  ? "border-slate-900 bg-slate-900 text-white dark:border-white dark:bg-white dark:text-slate-900"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
+              }`}
+            >
+              Menor valor
+            </button>
+            <button
+              onClick={() => setSortBy("amount-desc")}
+              className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                sortBy === "amount-desc"
+                  ? "border-slate-900 bg-slate-900 text-white dark:border-white dark:bg-white dark:text-slate-900"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
+              }`}
+            >
+              Maior valor
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="space-y-3">
         {loading
           ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
@@ -300,7 +368,7 @@ export function Transactions() {
                   </p>
                 </div>
               )
-            : expenses.map((expense) => (
+            : sortedExpenses.map((expense) => (
                 <ExpenseCard
                   key={expense.id}
                   expense={expense}

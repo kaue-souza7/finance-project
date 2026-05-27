@@ -11,4 +11,7 @@ export const expenseApi = {
     api.put<ExpenseResponse>(`/expenses/${id}`, data),
 
   delete: (id: string) => api.delete(`/expenses/${id}`),
+
+  copyFromPrevious: (month: number, year: number) =>
+    api.post<ExpenseResponse[]>(`/expenses/copy-from/${month}/${year}`),
 };

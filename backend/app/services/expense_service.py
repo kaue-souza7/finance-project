@@ -1,3 +1,4 @@
+import calendar
 import uuid
 
 from fastapi import HTTPException, status
@@ -62,3 +63,58 @@ class ExpenseService:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         self._assert_planning_owner(str(expense.planning_id), user_id)
         self.repo.delete(self.db, expense)
+
+    def copy_from_previous(
+        self, user_id: str, target_month: int, target_year: int
+    ) -> list[ExpenseResponse]:
+        uid = uuid.UUID(user_id)
+
+        prev_month = target_month - 1
+        prev_year = target_year
+        if prev_month == 0:
+            prev_month = 12
+            prev_year -= 1
+
+        prev_plan = PlanningRepository.get_by_user_and_month(
+            self.db, uid, prev_month, prev_year
+        )
+        if not prev_plan:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="No planning found for the previous month",
+            )
+
+        target_plan = PlanningRepository.get_by_user_and_month(
+            self.db, uid, target_month, target_year
+        )
+        if not target_plan:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="No planning found for the target month",
+            )
+
+        prev_expenses = self.repo.list_by_planning(self.db, prev_plan.id)
+        if not prev_expenses:
+            return []
+
+        expenses_data = []
+        for exp in prev_expenses:
+            original_day = exp.due_date.day
+            last_day = calendar.monthrange(target_year, target_month)[1]
+            new_day = min(original_day, last_day)
+            new_due_date = exp.due_date.replace(
+                year=target_year, month=target_month, day=new_day
+            )
+            expenses_data.append({
+                "planning_id": target_plan.id,
+                "category_id": exp.category_id,
+                "category": exp.category,
+                "description": exp.description,
+                "amount": exp.amount,
+                "recurrence": exp.recurrence,
+                "due_date": new_due_date,
+                "paid": False,
+            })
+
+        created = self.repo.bulk_create(self.db, expenses_data)
+        return [self._to_response(e) for e in created]

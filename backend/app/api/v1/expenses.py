@@ -40,6 +40,23 @@ def update_expense(
     return service.update(expense_id, data, str(current_user.id))
 
 
+@router.post(
+    "/copy-from/{target_month}/{target_year}",
+    response_model=list[ExpenseResponse],
+    status_code=201,
+)
+def copy_expenses_from_previous(
+    target_month: int,
+    target_year: int,
+    current_user: UserResponse = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    service = ExpenseService(db)
+    return service.copy_from_previous(
+        str(current_user.id), target_month, target_year
+    )
+
+
 @router.delete("/{expense_id}", status_code=204)
 def delete_expense(
     expense_id: str,
