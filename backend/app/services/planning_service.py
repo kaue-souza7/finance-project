@@ -1,8 +1,10 @@
+import calendar
 import uuid
 
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.repositories.expense_repository import ExpenseRepository
 from app.repositories.planning_repository import PlanningRepository
 from app.schemas.planning import (
     PlanningCreate,
@@ -84,24 +86,38 @@ class PlanningService:
                 detail="No planning found for the previous month",
             )
 
-        existing = self.repo.get_by_user_and_month(
+        target_plan = self.repo.get_by_user_and_month(
             self.db, uid, target_month, target_year
         )
-        if existing:
+        if not target_plan:
             raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail="A planning already exists for this month",
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="No planning found for the target month",
             )
 
-        data = PlanningCreate(
-            month=target_month,
-            year=target_year,
-            expected_revenue=prev.expected_revenue,
-            expected_expenses=prev.expected_expenses,
-            planned_investment=prev.planned_investment,
-        )
-        plan = self.repo.create(self.db, uid, data)
-        return self._to_response(plan)
+        prev_expenses = ExpenseRepository.list_by_planning(self.db, prev.id)
+        if prev_expenses:
+            expenses_data = []
+            for exp in prev_expenses:
+                original_day = exp.due_date.day
+                last_day = calendar.monthrange(target_year, target_month)[1]
+                new_day = min(original_day, last_day)
+                new_due_date = exp.due_date.replace(
+                    year=target_year, month=target_month, day=new_day
+                )
+                expenses_data.append({
+                    "planning_id": target_plan.id,
+                    "category_id": exp.category_id,
+                    "category": exp.category,
+                    "description": exp.description,
+                    "amount": exp.amount,
+                    "recurrence": exp.recurrence,
+                    "due_date": new_due_date,
+                    "paid": False,
+                })
+            ExpenseRepository.bulk_create(self.db, expenses_data)
+
+        return self._to_response(target_plan)
 
     def update(
         self, planning_id: str, user_id: str, data: PlanningUpdate

@@ -50,3 +50,12 @@ class ExpenseRepository:
     def delete(db: Session, expense: Expense) -> None:
         db.delete(expense)
         db.commit()
+
+    @staticmethod
+    def bulk_create(db: Session, expenses_data: list[dict]) -> list[Expense]:
+        expenses = [Expense(**data) for data in expenses_data]
+        db.add_all(expenses)
+        db.commit()
+        for expense in expenses:
+            db.refresh(expense)
+        return expenses

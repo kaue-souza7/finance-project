@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Plus, Receipt } from "lucide-react";
+import { Copy, Plus, Receipt } from "lucide-react";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { ExpenseCard } from "@/components/ExpenseCard";
 import { ExpenseForm } from "@/components/ExpenseForm";
 import { MonthSelector } from "@/components/MonthSelector";
@@ -8,7 +9,7 @@ import { SkeletonCard } from "@/components/Skeleton";
 import { Toast } from "@/components/Toast";
 import { planningApi } from "@/services/planning";
 import { expenseApi } from "@/services/expense";
-import { getCurrentMonth, nextMonth, prevMonth } from "@/utils/date";
+import { MONTHS, getCurrentMonth, nextMonth, prevMonth } from "@/utils/date";
 import type {
   ExpenseCreate,
   ExpenseResponse,
@@ -46,6 +47,8 @@ export function Transactions() {
     message: string;
     variant: "success" | "error";
   } | null>(null);
+  const [copying, setCopying] = useState(false);
+  const [showCopyConfirm, setShowCopyConfirm] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -142,6 +145,28 @@ export function Transactions() {
     }
   };
 
+  const handleCopyFromPrevious = async () => {
+    setCopying(true);
+    try {
+      await planningApi.copyFromPrevious(month, year);
+      setShowCopyConfirm(false);
+      setToast({
+        message: "Despesas copiadas com sucesso",
+        variant: "success",
+      });
+      load();
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "";
+      let friendly = "Erro ao copiar";
+      if (msg.includes("No planning found")) {
+        friendly = "Nenhum planejamento encontrado no mês anterior";
+      }
+      setToast({ message: friendly, variant: "error" });
+    } finally {
+      setCopying(false);
+    }
+  };
+
   const totalExpenses = expenses.reduce(
     (acc, e) => acc + Number(e.amount),
     0,
@@ -155,16 +180,26 @@ export function Transactions() {
             Despesas
           </h1>
           {plan && (
-            <button
-              onClick={() => {
-                setEditExpense(null);
-                setShowForm(!showForm);
-              }}
-              className="flex min-h-[44px] items-center gap-2 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
-            >
-              <Plus size={18} />
-              Nova
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowCopyConfirm(true)}
+                disabled={copying}
+                className="flex min-h-[44px] items-center gap-2 rounded-lg border border-slate-200 px-4 text-sm font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
+              >
+                <Copy size={16} />
+                Copiar
+              </button>
+              <button
+                onClick={() => {
+                  setEditExpense(null);
+                  setShowForm(!showForm);
+                }}
+                className="flex min-h-[44px] items-center gap-2 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+              >
+                <Plus size={18} />
+                Nova
+              </button>
+            </div>
           )}
         </div>
         <MonthSelector
@@ -275,6 +310,15 @@ export function Transactions() {
                 />
               ))}
       </div>
+
+      <ConfirmDialog
+        open={showCopyConfirm}
+        title="Copiar despesas do mês anterior"
+        message={`As despesas de ${month === 1 ? MONTHS[11] : MONTHS[month - 2]} ${month === 1 ? year - 1 : year} serão copiadas para ${MONTHS[month - 1]} ${year}. As despesas pagas serão resetadas.`}
+        loading={copying}
+        onConfirm={handleCopyFromPrevious}
+        onCancel={() => setShowCopyConfirm(false)}
+      />
 
       <Toast
         open={!!toast}
