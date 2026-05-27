@@ -24,6 +24,20 @@ export default {
       gridTemplateColumns: {
         layout: "16rem 1fr",
       },
+      keyframes: {
+        dropdown: {
+          "0%": { opacity: "0", transform: "scale(0.95) translateY(-4px)" },
+          "100%": { opacity: "1", transform: "scale(1) translateY(0)" },
+        },
+        toast: {
+          "0%": { opacity: "0", transform: "translateY(16px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        dropdown: "dropdown 0.15s ease-out",
+        toast: "toast 0.3s ease-out",
+      },
     },
   },
   plugins: [],

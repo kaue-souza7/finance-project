@@ -15,6 +15,7 @@ class UserResponse(BaseModel):
     email: str
     name: str
     is_active: bool
+    avatar_url: str | None = None
     created_at: datetime
 
     model_config = {"from_attributes": True}

@@ -6,6 +6,7 @@ import { Dashboard } from "@/pages/Dashboard";
 import { Investments } from "@/pages/Investments";
 import { Login } from "@/pages/Login";
 import { Plannings } from "@/pages/Plannings";
+import { Profile } from "@/pages/Profile";
 import { Register } from "@/pages/Register";
 import { Settings } from "@/pages/Settings";
 import { Transactions } from "@/pages/Transactions";
@@ -23,6 +24,7 @@ export const routes: RouteObject[] = [
       { path: "investments", element: <Investments /> },
       { path: "transactions", element: <Transactions /> },
       { path: "categories", element: <Categories /> },
+      { path: "profile", element: <Profile /> },
       { path: "settings", element: <Settings /> },
     ],
   },

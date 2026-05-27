@@ -80,7 +80,24 @@ export interface UserResponse {
   email: string;
   name: string;
   is_active: boolean;
+  avatar_url: string | null;
   created_at: string;
+}
+
+export interface AvatarResponse {
+  avatar_url: string | null;
+  avatar_public_id: string | null;
+}
+
+export interface ProfileUpdate {
+  name?: string;
+  email?: string;
+}
+
+export interface PasswordChange {
+  current_password: string;
+  new_password: string;
+  confirm_new_password: string;
 }
 
 export interface LoginRequest {

@@ -1,5 +1,6 @@
 import { Menu, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/contexts/PreferencesContext";
+import { UserDropdown } from "@/components/UserDropdown";
 
 interface TopbarProps {
   onMenuClick: () => void;
@@ -23,13 +24,17 @@ export function Topbar({ onMenuClick }: TopbarProps) {
         </span>
       </div>
 
-      <button
-        onClick={toggleTheme}
-        className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
-        aria-label="Alternar tema"
-      >
-        {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
-      </button>
+      <div className="flex items-center gap-1">
+        <button
+          onClick={toggleTheme}
+          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+          aria-label="Alternar tema"
+        >
+          {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
+
+        <UserDropdown />
+      </div>
     </header>
   );
 }
