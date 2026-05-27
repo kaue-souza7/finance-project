@@ -9,6 +9,8 @@ import {
   Wallet,
   X,
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Avatar } from "@/components/Avatar";
 
 const links = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -24,6 +26,8 @@ interface DrawerProps {
 }
 
 export function Drawer({ open, onClose }: DrawerProps) {
+  const { user } = useAuth();
+
   useEffect(() => {
     if (open) {
       document.documentElement.classList.add("no-scroll");
@@ -85,6 +89,30 @@ export function Drawer({ open, onClose }: DrawerProps) {
         </nav>
 
         <div className="border-t border-slate-200 p-3 dark:border-slate-700">
+          {user && (
+            <NavLink
+              to="/profile"
+              onClick={onClose}
+              className={({ isActive }) =>
+                `mb-2 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive
+                    ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
+                    : "text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                }`
+              }
+            >
+              <Avatar src={user.avatar_url} name={user.name} size="sm" />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-slate-900 dark:text-white">
+                  {user.name}
+                </p>
+                <p className="truncate text-xs text-slate-500 dark:text-slate-400">
+                  {user.email}
+                </p>
+              </div>
+            </NavLink>
+          )}
+
           <NavLink
             to="/settings"
             onClick={onClose}
