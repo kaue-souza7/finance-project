@@ -1,4 +1,4 @@
-import { Loader2, Mail, UserPlus } from "lucide-react";
+import { Mail, UserPlus } from "lucide-react";
 import type { ChatInviteResponse } from "@/types/finance";
 
 interface InviteBannerProps {

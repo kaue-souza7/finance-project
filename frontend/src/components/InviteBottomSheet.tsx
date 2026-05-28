@@ -1,8 +1,6 @@
 import { useEffect, useRef } from "react";
 import {
-  AlertCircle,
   Loader2,
-  RefreshCw,
   UserCheck,
   UserPlus,
   X,
@@ -18,7 +16,6 @@ interface InviteBottomSheetProps {
   acting: string | null;
   onAccept: (id: string) => void;
   onDecline: (id: string) => void;
-  onReload: () => void;
 }
 
 export function InviteBottomSheet({
@@ -29,7 +26,6 @@ export function InviteBottomSheet({
   acting,
   onAccept,
   onDecline,
-  onReload,
 }: InviteBottomSheetProps) {
   const sheetRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
