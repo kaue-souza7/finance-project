@@ -25,6 +25,8 @@ import { Skeleton, SkeletonCard } from "@/components/Skeleton";
 import { Toast } from "@/components/Toast";
 import { leisureApi } from "@/services/leisure";
 import { leisureExpenseApi } from "@/services/leisureExpense";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/contexts/ToastContext";
 import type { LeisureExpenseResponse, LeisureResponse } from "@/types/finance";
 
 type Tab = "overview" | "expenses" | "km" | "participants";
@@ -82,6 +84,8 @@ const formatDate = (dateStr: string) => {
 export function LeisureDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { toast: showToast } = useToast();
 
   const [event, setEvent] = useState<LeisureResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -93,6 +97,8 @@ export function LeisureDetail() {
   const [expensesError, setExpensesError] = useState<string | null>(null);
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deletingEvent, setDeletingEvent] = useState(false);
   const [toast, setToast] = useState<{
     message: string;
     variant: "success" | "error";
@@ -111,6 +117,21 @@ export function LeisureDetail() {
       setExpensesLoading(false);
     }
   }, [id]);
+
+  const handleDeleteEvent = useCallback(async () => {
+    if (!id) return;
+    setDeletingEvent(true);
+    try {
+      await leisureApi.delete(id);
+      showToast("Lazer excluído com sucesso!", "success");
+      navigate("/leisure", { replace: true });
+    } catch {
+      showToast("Erro ao excluir lazer", "error");
+      setConfirmDelete(false);
+    } finally {
+      setDeletingEvent(false);
+    }
+  }, [id, navigate, showToast]);
 
   const handleTogglePaid = useCallback(
     async (expense: LeisureExpenseResponse) => {
@@ -250,6 +271,7 @@ export function LeisureDetail() {
 
   const status = STATUS_CONFIG[event.status] ?? STATUS_CONFIG.planning;
   const budget = event.budget ? Number(event.budget) : 0;
+  const isOwner = user?.id === event.owner_id;
 
   return (
     <section className="mx-auto max-w-6xl">
@@ -300,6 +322,42 @@ export function LeisureDetail() {
                 <Clock size={14} className="shrink-0" />
                 {countdown.text}
               </span>
+            )}
+
+            {isOwner && (
+              <div className="mt-2 w-full border-t border-slate-200 pt-3 dark:border-slate-700">
+                {confirmDelete ? (
+                  <div className="flex flex-col items-end gap-2">
+                    <span className="text-xs leading-relaxed text-rose-600 dark:text-rose-400">
+                      Excluir este lazer permanentemente?
+                    </span>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setConfirmDelete(false)}
+                        disabled={deletingEvent}
+                        className="inline-flex min-h-[36px] items-center rounded-lg border border-slate-200 px-3 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-50 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={handleDeleteEvent}
+                        disabled={deletingEvent}
+                        className="inline-flex min-h-[36px] items-center rounded-lg bg-rose-500 px-3 text-xs font-medium text-white transition-colors hover:bg-rose-600 disabled:opacity-50"
+                      >
+                        {deletingEvent ? "Excluindo..." : "Sim, excluir"}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setConfirmDelete(true)}
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-rose-500 transition-colors hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300"
+                  >
+                    <Trash2 size={13} />
+                    Excluir lazer
+                  </button>
+                )}
+              </div>
             )}
           </div>
         </div>
