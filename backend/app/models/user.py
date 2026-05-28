@@ -29,6 +29,21 @@ class User(Base):
     )
     plannings = relationship("Planning", back_populates="user")
     categories = relationship("Category", back_populates="user")
+    leisure_events = relationship("LeisureEvent", back_populates="owner")
+    leisure_expenses = relationship("LeisureExpense", back_populates="creator")
+    leisure_participations = relationship(
+        "LeisureParticipant", back_populates="user"
+    )
+    sent_invites = relationship(
+        "LeisureInvite",
+        foreign_keys="LeisureInvite.sender_id",
+        back_populates="sender",
+    )
+    received_invites = relationship(
+        "LeisureInvite",
+        foreign_keys="LeisureInvite.receiver_user_id",
+        back_populates="receiver",
+    )
 
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

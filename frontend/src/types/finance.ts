@@ -126,6 +126,139 @@ export interface ExpenseUpdate {
   paid?: boolean;
 }
 
+export interface LeisureResponse {
+  id: string;
+  owner_id: string;
+  title: string;
+  description: string | null;
+  date: string;
+  start_time: string | null;
+  end_time: string | null;
+  budget: string | null;
+  status: string;
+  location_name: string | null;
+  location_address: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  created_at: string;
+  participant_count: number;
+}
+
+export interface LeisureCreate {
+  title: string;
+  description?: string | null;
+  date: string;
+  start_time?: string | null;
+  end_time?: string | null;
+  budget?: number | null;
+  status?: string;
+  location_name?: string | null;
+  location_address?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+}
+
+export interface LeisureUpdate {
+  title?: string;
+  description?: string | null;
+  date?: string;
+  start_time?: string | null;
+  end_time?: string | null;
+  budget?: number | null;
+  status?: string;
+  location_name?: string | null;
+  location_address?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+}
+
+export interface LeisureExpenseResponse {
+  id: string;
+  leisure_id: string;
+  title: string;
+  category: string;
+  amount: string;
+  description: string | null;
+  paid: boolean;
+  add_to_planning: boolean;
+  planning_expense_id: string | null;
+  created_by: string;
+  created_at: string;
+}
+
+export interface LeisureExpenseCreate {
+  title: string;
+  category: string;
+  amount: number;
+  description?: string | null;
+  paid?: boolean;
+  add_to_planning?: boolean;
+}
+
+export interface LeisureExpenseUpdate {
+  title?: string;
+  category?: string;
+  amount?: number;
+  description?: string | null;
+  paid?: boolean;
+}
+
+export interface LeisureParticipantResponse {
+  id: string;
+  leisure_id: string;
+  user_id: string;
+  role: string;
+  created_at: string;
+  user_name: string | null;
+  user_email: string | null;
+}
+
+export interface InviteResponse {
+  id: string;
+  leisure_id: string;
+  sender_id: string;
+  receiver_user_id: string;
+  status: string;
+  created_at: string;
+  responded_at: string | null;
+  leisure_title: string | null;
+  leisure_date: string | null;
+  sender_name: string | null;
+  sender_email: string | null;
+  receiver_name: string | null;
+  receiver_email: string | null;
+}
+
+export interface InviteSendRequest {
+  email: string;
+}
+
+export interface LeisureKmCreate {
+  origin: string;
+  destination: string;
+  distance_km: number;
+  fuel_price: number;
+  car_consumption: number;
+  tolls?: number;
+  estimated_time?: string | null;
+}
+
+export interface LeisureKmResponse {
+  id: string;
+  leisure_id: string;
+  origin: string;
+  destination: string;
+  distance_km: string;
+  fuel_price: string;
+  car_consumption: string;
+  tolls: string;
+  total_cost: string;
+  fuel_cost: string;
+  estimated_time: string | null;
+  created_by: string;
+  created_at: string;
+}
+
 export interface MonthlyInvestment {
   month: number;
   year: number;

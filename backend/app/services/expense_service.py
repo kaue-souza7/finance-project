@@ -45,6 +45,7 @@ class ExpenseService:
     def create(self, data: ExpenseCreate, user_id: str) -> ExpenseResponse:
         self._assert_planning_owner(data.planning_id, user_id)
         expense = self.repo.create(self.db, data)
+        self.db.commit()
         return self._to_response(expense)
 
     def update(
@@ -55,6 +56,7 @@ class ExpenseService:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         self._assert_planning_owner(str(expense.planning_id), user_id)
         expense = self.repo.update(self.db, expense, data)
+        self.db.commit()
         return self._to_response(expense)
 
     def delete(self, expense_id: str, user_id: str) -> None:
@@ -63,6 +65,7 @@ class ExpenseService:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         self._assert_planning_owner(str(expense.planning_id), user_id)
         self.repo.delete(self.db, expense)
+        self.db.commit()
 
     def copy_from_previous(
         self, user_id: str, target_month: int, target_year: int
@@ -117,4 +120,5 @@ class ExpenseService:
             })
 
         created = self.repo.bulk_create(self.db, expenses_data)
+        self.db.commit()
         return [self._to_response(e) for e in created]

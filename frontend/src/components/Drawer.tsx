@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import {
   CalendarCheck,
   LayoutDashboard,
+  LayoutGrid,
   PiggyBank,
   Settings,
   Tags,
@@ -12,12 +13,16 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar } from "@/components/Avatar";
 
-const links = [
+const mainLinks = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
   { to: "/plannings", label: "Planejamentos", icon: CalendarCheck },
   { to: "/investments", label: "Investimentos", icon: PiggyBank },
   { to: "/transactions", label: "Transações", icon: Wallet },
   { to: "/categories", label: "Categorias", icon: Tags },
+];
+
+const secondaryLinks = [
+  { to: "/modules", label: "Outros módulos", icon: LayoutGrid },
 ];
 
 interface DrawerProps {
@@ -67,7 +72,30 @@ export function Drawer({ open, onClose }: DrawerProps) {
 
         <nav className="flex-1 overflow-y-auto overscroll-contain p-3">
           <ul className="space-y-1">
-            {links.map((link) => (
+            {mainLinks.map((link) => (
+              <li key={link.to}>
+                <NavLink
+                  to={link.to}
+                  onClick={onClose}
+                  className={({ isActive }) =>
+                    `flex min-h-[44px] items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors ${
+                      isActive
+                        ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
+                        : "text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                    }`
+                  }
+                >
+                  <link.icon size={20} />
+                  {link.label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+
+          <div className="my-3 mx-3 border-t border-slate-200 dark:border-slate-700" />
+
+          <ul className="space-y-1">
+            {secondaryLinks.map((link) => (
               <li key={link.to}>
                 <NavLink
                   to={link.to}

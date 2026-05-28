@@ -33,7 +33,7 @@ class ExpenseRepository:
             paid=data.paid,
         )
         db.add(expense)
-        db.commit()
+        db.flush()
         db.refresh(expense)
         return expense
 
@@ -42,20 +42,20 @@ class ExpenseRepository:
         update_data = data.model_dump(exclude_unset=True)
         for key, value in update_data.items():
             setattr(expense, key, value)
-        db.commit()
+        db.flush()
         db.refresh(expense)
         return expense
 
     @staticmethod
     def delete(db: Session, expense: Expense) -> None:
         db.delete(expense)
-        db.commit()
+        db.flush()
 
     @staticmethod
     def bulk_create(db: Session, expenses_data: list[dict]) -> list[Expense]:
         expenses = [Expense(**data) for data in expenses_data]
         db.add_all(expenses)
-        db.commit()
+        db.flush()
         for expense in expenses:
             db.refresh(expense)
         return expenses

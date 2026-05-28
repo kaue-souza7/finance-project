@@ -45,7 +45,7 @@ class PlanningRepository:
             planned_investment=data.planned_investment,
         )
         db.add(plan)
-        db.commit()
+        db.flush()
         db.refresh(plan)
         return plan
 
@@ -54,11 +54,11 @@ class PlanningRepository:
         update_data = data.model_dump(exclude_unset=True)
         for key, value in update_data.items():
             setattr(plan, key, value)
-        db.commit()
+        db.flush()
         db.refresh(plan)
         return plan
 
     @staticmethod
     def delete(db: Session, plan: Planning) -> None:
         db.delete(plan)
-        db.commit()
+        db.flush()
