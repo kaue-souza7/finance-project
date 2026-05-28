@@ -7,6 +7,7 @@ import {
   MessageSquareText,
   RefreshCw,
 } from "lucide-react";
+import { Avatar } from "@/components/Avatar";
 import { ChatBubble } from "@/components/ChatBubble";
 import { ChatInput } from "@/components/ChatInput";
 import { useMessages } from "@/hooks/useMessages";
@@ -25,7 +26,7 @@ export function ChatDetail() {
 
   const chat = chats.find((c) => c.id === id);
   const participantName = chat?.participant?.name ?? "Chat";
-  const participantInitial = participantName.charAt(0).toUpperCase();
+  const participantAvatarUrl = chat?.participant?.avatar_url;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -49,9 +50,7 @@ export function ChatDetail() {
         >
           <ArrowLeft size={18} />
         </button>
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sky-100 text-sm font-semibold text-sky-600 dark:bg-sky-900/30 dark:text-sky-400">
-          {participantInitial}
-        </div>
+        <Avatar src={participantAvatarUrl} name={participantName} size="sm" />
         <div>
           <h2 className="text-sm font-semibold text-slate-900 dark:text-white">
             {participantName}
@@ -104,6 +103,7 @@ export function ChatDetail() {
               message={msg}
               isOwn={msg.sender_id === user?.id}
               senderName={participantName}
+              senderAvatarUrl={participantAvatarUrl}
             />
           ))
         )}

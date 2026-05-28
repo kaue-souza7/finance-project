@@ -7,6 +7,7 @@ import {
   RefreshCw,
   UserPlus,
 } from "lucide-react";
+import { Avatar } from "@/components/Avatar";
 import { Card } from "@/components/Card";
 import { Skeleton, SkeletonCard } from "@/components/Skeleton";
 import { Toast } from "@/components/Toast";
@@ -187,9 +188,7 @@ export function Chat() {
               }}
             >
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sky-100 text-sm font-semibold text-sky-600 dark:bg-sky-900/30 dark:text-sky-400">
-                  {chat.participant.name.charAt(0).toUpperCase()}
-                </div>
+                <Avatar src={chat.participant.avatar_url} name={chat.participant.name} size="md" />
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-slate-900 dark:text-white">
                     {chat.participant.name}

@@ -1,9 +1,11 @@
+import { Avatar } from "@/components/Avatar";
 import type { MessageResponse } from "@/types/finance";
 
 interface ChatBubbleProps {
   message: MessageResponse;
   isOwn: boolean;
   senderName: string;
+  senderAvatarUrl?: string | null;
 }
 
 function formatTime(iso: string) {
@@ -14,13 +16,11 @@ function formatTime(iso: string) {
   });
 }
 
-export function ChatBubble({ message, isOwn, senderName }: ChatBubbleProps) {
+export function ChatBubble({ message, isOwn, senderName, senderAvatarUrl }: ChatBubbleProps) {
   return (
     <div className={`flex items-end gap-2 ${isOwn ? "flex-row-reverse" : ""}`}>
       {!isOwn && (
-        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-100 text-[11px] font-semibold text-sky-600 dark:bg-sky-900/30 dark:text-sky-400">
-          {senderName.charAt(0).toUpperCase()}
-        </div>
+        <Avatar src={senderAvatarUrl} name={senderName} size="xs" />
       )}
 
       <div className="flex max-w-[80%] flex-col gap-0.5">
