@@ -1,5 +1,6 @@
 import { MessageSquarePlus, MessageSquareText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Avatar } from "@/components/Avatar";
 import { Skeleton } from "@/components/Skeleton";
 import type { ChatResponse } from "@/types/finance";
 
@@ -56,9 +57,7 @@ export function ChatSidebar({ chats, activeId, loading, onNewChat }: ChatSidebar
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky-100 text-sm font-semibold text-sky-600 dark:bg-sky-900/30 dark:text-sky-400">
-                      {chat.participant.name.charAt(0).toUpperCase()}
-                    </div>
+                    <Avatar src={chat.participant.avatar_url} name={chat.participant.name} size="md" />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium text-slate-900 dark:text-white">
                         {chat.participant.name}

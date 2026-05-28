@@ -3,11 +3,12 @@ import { useState } from "react";
 interface AvatarProps {
   src?: string | null;
   name: string;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   className?: string;
 }
 
 const sizeClasses = {
+  xs: "h-7 w-7 text-[10px]",
   sm: "h-8 w-8 text-xs",
   md: "h-10 w-10 text-sm",
   lg: "h-20 w-20 text-2xl",
