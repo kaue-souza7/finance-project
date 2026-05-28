@@ -10,6 +10,10 @@ from app.api.v1.expenses import router as expenses_router
 from app.api.v1.investments import router as investments_router
 from app.api.v1.plannings import router as plannings_router
 from app.api.v1.profile import router as profile_router
+from app.api.v1.leisure import router as leisure_router
+from app.api.v1.leisure_expenses import router as leisure_expenses_router
+from app.api.v1.leisure_invites import router as leisure_invites_router
+from app.api.v1.leisure_km import router as leisure_km_router
 
 
 def create_app() -> FastAPI:
@@ -32,6 +36,10 @@ def create_app() -> FastAPI:
     app.include_router(categories_router, prefix="/api/v1")
     app.include_router(investments_router, prefix="/api/v1")
     app.include_router(profile_router, prefix="/api/v1")
+    app.include_router(leisure_invites_router, prefix="/api/v1")
+    app.include_router(leisure_router, prefix="/api/v1")
+    app.include_router(leisure_expenses_router, prefix="/api/v1")
+    app.include_router(leisure_km_router, prefix="/api/v1")
 
     return app
 

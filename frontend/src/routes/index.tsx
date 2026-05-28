@@ -10,6 +10,9 @@ import { Profile } from "@/pages/Profile";
 import { Register } from "@/pages/Register";
 import { Settings } from "@/pages/Settings";
 import { Transactions } from "@/pages/Transactions";
+import { Modules } from "@/pages/Modules";
+import { Leisure } from "@/pages/Leisure";
+import { LeisureDetail } from "@/pages/LeisureDetail";
 
 export const routes: RouteObject[] = [
   {
@@ -26,6 +29,9 @@ export const routes: RouteObject[] = [
       { path: "categories", element: <Categories /> },
       { path: "profile", element: <Profile /> },
       { path: "settings", element: <Settings /> },
+      { path: "modules", element: <Modules /> },
+      { path: "leisure", element: <Leisure /> },
+      { path: "leisure/:id", element: <LeisureDetail /> },
     ],
   },
   { path: "login", element: <Login /> },

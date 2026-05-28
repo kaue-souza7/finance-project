@@ -44,6 +44,7 @@ class PlanningService:
                 detail="Planning already exists for this month and year",
             )
         plan = self.repo.create(self.db, uid, data)
+        self.db.commit()
         return self._to_response(plan)
 
     def list_by_user(self, user_id: str) -> list[PlanningResponse]:
@@ -101,6 +102,7 @@ class PlanningService:
             planned_investment=prev.planned_investment,
         )
         plan = self.repo.create(self.db, uid, data)
+        self.db.commit()
         return self._to_response(plan)
 
     def update(
@@ -110,6 +112,7 @@ class PlanningService:
         if not plan or str(plan.user_id) != user_id:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         plan = self.repo.update(self.db, plan, data)
+        self.db.commit()
         return self._to_response(plan)
 
     def delete(self, planning_id: str, user_id: str) -> None:
@@ -117,3 +120,4 @@ class PlanningService:
         if not plan or str(plan.user_id) != user_id:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         self.repo.delete(self.db, plan)
+        self.db.commit()
