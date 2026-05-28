@@ -6,6 +6,10 @@ from app.models.leisure import LeisureEvent
 from app.models.leisure_expense import LeisureExpense
 from app.models.leisure_participant import LeisureParticipant
 from app.models.leisure_invite import LeisureInvite
+from app.models.chat import Chat
+from app.models.chat_participant import ChatParticipant
+from app.models.chat_invite import ChatInvite
+from app.models.message import Message
 from app.models.leisure_km import LeisureKmCalculation
 
 __all__ = [
@@ -18,4 +22,8 @@ __all__ = [
     "LeisureParticipant",
     "LeisureInvite",
     "LeisureKmCalculation",
+    "Chat",
+    "ChatParticipant",
+    "ChatInvite",
+    "Message",
 ]

@@ -28,8 +28,14 @@ async function request<T>(
       method,
       headers,
       body: body ? JSON.stringify(body) : undefined,
+      signal: AbortSignal.timeout(30_000),
     });
-  } catch {
+  } catch (err) {
+    if (err instanceof DOMException && err.name === "TimeoutError") {
+      console.error("[api] timeout", method, path);
+      throw new Error("O servidor está demorando muito para responder. Tente novamente.");
+    }
+    console.error("[api] rede", method, path, err);
     throw new Error("Erro de rede — backend offline ou inacessível");
   }
 
