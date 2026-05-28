@@ -226,7 +226,6 @@ export function Chat() {
         acting={acting}
         onAccept={handleAccept}
         onDecline={handleDecline}
-        onReload={reloadInvites}
       />
 
       <Toast
