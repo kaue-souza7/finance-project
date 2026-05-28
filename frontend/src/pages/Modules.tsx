@@ -1,4 +1,4 @@
-import { Plane } from "lucide-react";
+import { MessageSquareText, Plane } from "lucide-react";
 import { ModuleCard } from "@/components/ModuleCard";
 
 const modules = [
@@ -9,6 +9,14 @@ const modules = [
       "Controle e planejamento de gastos com viagens e atividades de lazer.",
     comingSoon: false,
     to: "/leisure",
+  },
+  {
+    icon: MessageSquareText,
+    title: "Finance Chat",
+    description:
+      "Converse com outros usuários sobre finanças com mensagens privadas.",
+    comingSoon: false,
+    to: "/chat",
   },
 ];
 

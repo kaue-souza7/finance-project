@@ -273,3 +273,48 @@ export interface InvestmentSummary {
   best_month: MonthlyInvestment | null;
   monthly_breakdown: MonthlyInvestment[];
 }
+
+export interface ChatResponse {
+  id: string;
+  participant: ChatParticipantResponse;
+  last_message: string | null;
+  last_interaction_at: string | null;
+  created_at: string;
+}
+
+export interface ChatParticipantResponse {
+  id: string;
+  user_id: string;
+  name: string;
+  avatar_url: string | null;
+}
+
+export interface MessageResponse {
+  id: string;
+  chat_id: string;
+  sender_id: string;
+  content: string;
+  created_at: string;
+  expires_at: string;
+}
+
+export interface MessagePageResponse {
+  messages: MessageResponse[];
+  next_cursor: string | null;
+}
+
+export interface ChatInviteResponse {
+  id: string;
+  sender_id: string;
+  receiver_user_id: string;
+  status: string;
+  created_at: string;
+  responded_at: string | null;
+  sender_name: string | null;
+  sender_email: string | null;
+  chat_id: string | null;
+}
+
+export interface MessageSend {
+  content: string;
+}

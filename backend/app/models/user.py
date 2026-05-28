@@ -44,6 +44,20 @@ class User(Base):
         foreign_keys="LeisureInvite.receiver_user_id",
         back_populates="receiver",
     )
+    chat_participations = relationship(
+        "ChatParticipant", back_populates="user"
+    )
+    sent_chat_invites = relationship(
+        "ChatInvite",
+        foreign_keys="ChatInvite.sender_id",
+        back_populates="sender",
+    )
+    received_chat_invites = relationship(
+        "ChatInvite",
+        foreign_keys="ChatInvite.receiver_id",
+        back_populates="receiver",
+    )
+    messages = relationship("Message", back_populates="sender")
 
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

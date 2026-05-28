@@ -39,8 +39,14 @@ async function authFetch<T>(path: string, body?: unknown): Promise<T> {
       method: body ? "POST" : "GET",
       headers,
       body: body ? JSON.stringify(body) : undefined,
+      signal: AbortSignal.timeout(30_000),
     });
-  } catch {
+  } catch (err) {
+    if (err instanceof DOMException && err.name === "TimeoutError") {
+      console.error("[authFetch] timeout", path);
+      throw new Error("O servidor está demorando muito para responder. Tente novamente.");
+    }
+    console.error("[authFetch] rede", err);
     throw new Error("Erro de rede — backend offline ou inacessível");
   }
 
@@ -65,6 +71,8 @@ async function authFetch<T>(path: string, body?: unknown): Promise<T> {
       }
     } else if (res.status >= 500) {
       message = "Erro interno do servidor";
+    } else if (res.status === 401) {
+      message = "E-mail ou senha inválidos";
     } else if (res.status === 0) {
       message = "Erro de rede — backend offline";
     } else {
