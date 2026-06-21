@@ -52,3 +52,9 @@ class LeisureEvent(Base):
         back_populates="leisure",
         cascade="all, delete-orphan",
     )
+    km_calculation = relationship(
+        "LeisureKmCalculation",
+        back_populates="leisure",
+        cascade="all, delete-orphan",
+        uselist=False,
+    )

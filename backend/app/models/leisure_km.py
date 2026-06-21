@@ -41,5 +41,5 @@ class LeisureKmCalculation(Base):
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )
 
-    leisure = relationship("LeisureEvent", backref="km_calculation", uselist=False)
+    leisure = relationship("LeisureEvent", back_populates="km_calculation", uselist=False)
     creator = relationship("User")

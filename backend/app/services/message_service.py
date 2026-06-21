@@ -87,6 +87,8 @@ class MessageService:
             else None
         )
 
+        messages.reverse()
+
         return MessagePageResponse(
             messages=[self._message_to_response(m) for m in messages],
             next_cursor=next_cursor,

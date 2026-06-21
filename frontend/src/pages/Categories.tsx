@@ -20,6 +20,7 @@ export function Categories() {
   const [name, setName] = useState("");
   const [color, setColor] = useState(COLORS[0]);
   const [icon, setIcon] = useState("home");
+  const [showForm, setShowForm] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [toast, setToast] = useState<{
     message: string;
@@ -65,6 +66,7 @@ export function Categories() {
         setToast({ message: "Categoria criada", variant: "success" });
       }
       resetForm();
+      setShowForm(false);
       load();
     } catch {
       setToast({
@@ -80,7 +82,10 @@ export function Categories() {
       await categoryApi.delete(deleteTarget);
       setToast({ message: "Categoria excluída", variant: "success" });
       setDeleteTarget(null);
-      if (editingId === deleteTarget) resetForm();
+      if (editingId === deleteTarget) {
+        resetForm();
+        setShowForm(false);
+      }
       load();
     } catch {
       setToast({ message: "Erro ao excluir categoria", variant: "error" });
@@ -93,9 +98,9 @@ export function Categories() {
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
           Categorias
         </h1>
-        {!editingId && (
+        {!showForm && !editingId && (
           <button
-            onClick={resetForm}
+            onClick={() => { resetForm(); setShowForm(true); }}
             className="flex min-h-[44px] items-center gap-2 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
           >
             <Plus size={18} />
@@ -104,7 +109,7 @@ export function Categories() {
         )}
       </div>
 
-      {(editingId !== null || name || icon !== "home") && (
+      {(showForm || editingId !== null) && (
         <Card>
           <div className="space-y-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -135,7 +140,7 @@ export function Categories() {
                   Salvar
                 </button>
                 <button
-                  onClick={resetForm}
+                  onClick={() => { resetForm(); setShowForm(false); }}
                   className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
                 >
                   <X size={18} />
