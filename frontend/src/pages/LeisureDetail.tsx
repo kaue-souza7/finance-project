@@ -201,10 +201,10 @@ export function LeisureDetail() {
   }, [load]);
 
   useEffect(() => {
-    if (activeTab === "expenses" && id) {
+    if (id) {
       loadExpenses();
     }
-  }, [activeTab, id, loadExpenses]);
+  }, [id, loadExpenses]);
 
   const countdown = useMemo(() => {
     if (!event) return null;

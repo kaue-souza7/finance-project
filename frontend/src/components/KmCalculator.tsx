@@ -87,12 +87,13 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
       const data = await leisureKmApi.get(leisureId);
       setKmData(data);
       if (data) {
+        const dotToComma = (v: string) => v.replace(".", ",");
         setOrigin(data.origin);
         setDestination(data.destination);
-        setDistance(data.distance_km);
-        setFuelPrice(data.fuel_price);
-        setConsumption(data.car_consumption);
-        setTolls(data.tolls === "0" ? "" : data.tolls);
+        setDistance(dotToComma(data.distance_km));
+        setFuelPrice(dotToComma(data.fuel_price));
+        setConsumption(dotToComma(data.car_consumption));
+        setTolls(data.tolls === "0" ? "" : dotToComma(data.tolls));
         setEstimatedTime(data.estimated_time ?? "");
       }
     } catch (e) {
