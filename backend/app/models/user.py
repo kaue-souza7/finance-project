@@ -58,6 +58,27 @@ class User(Base):
         back_populates="receiver",
     )
     messages = relationship("Message", back_populates="sender")
+    shopping_lists = relationship("ShoppingList", back_populates="user")
+    sent_shopping_list_invites = relationship(
+        "ShoppingListInvite",
+        foreign_keys="ShoppingListInvite.sender_id",
+        back_populates="sender",
+    )
+    received_shopping_list_invites = relationship(
+        "ShoppingListInvite",
+        foreign_keys="ShoppingListInvite.receiver_user_id",
+        back_populates="receiver",
+    )
+    shared_shopping_lists = relationship(
+        "ShoppingListShare",
+        foreign_keys="ShoppingListShare.user_id",
+        back_populates="user",
+    )
+    created_shopping_list_shares = relationship(
+        "ShoppingListShare",
+        foreign_keys="ShoppingListShare.created_by",
+        back_populates="creator",
+    )
 
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

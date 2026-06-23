@@ -1,5 +1,6 @@
 import uuid
 
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app.models.user import User
@@ -51,6 +52,21 @@ class UserRepository:
         db.commit()
         db.refresh(user)
         return user
+
+    @staticmethod
+    def search(
+        db: Session, q: str, exclude_user_id: uuid.UUID
+    ) -> list[User]:
+        pattern = f"%{q}%"
+        return (
+            db.query(User)
+            .filter(
+                User.id != exclude_user_id,
+                or_(User.name.ilike(pattern), User.email.ilike(pattern)),
+            )
+            .limit(10)
+            .all()
+        )
 
     @staticmethod
     def remove_avatar(db: Session, user_id: uuid.UUID) -> User | None:

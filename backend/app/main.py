@@ -23,6 +23,14 @@ from app.api.v1.leisure_km import router as leisure_km_router
 from app.api.v1.chat_invites import router as chat_invites_router
 from app.api.v1.chats import router as chats_router
 from app.api.v1.chat_messages import router as chat_messages_router
+from app.api.v1.shopping_list import router as shopping_list_router
+from app.api.v1.shopping_list_invites import (
+    router as shopping_list_invites_router,
+)
+from app.api.v1.shopping_list_shares import (
+    router as shopping_list_shares_router,
+)
+from app.api.v1.users import router as users_router
 
 
 def create_app() -> FastAPI:
@@ -90,6 +98,10 @@ def create_app() -> FastAPI:
     app.include_router(chat_invites_router, prefix="/api/v1")
     app.include_router(chats_router, prefix="/api/v1")
     app.include_router(chat_messages_router, prefix="/api/v1")
+    app.include_router(shopping_list_router, prefix="/api/v1")
+    app.include_router(shopping_list_invites_router, prefix="/api/v1")
+    app.include_router(shopping_list_shares_router, prefix="/api/v1")
+    app.include_router(users_router, prefix="/api/v1")
 
     return app
 
