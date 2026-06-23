@@ -9,7 +9,7 @@ import type {
   ShoppingListItemUpdate,
   ShoppingListItemToggle,
   ShoppingListInviteResponse,
-  InviteSendRequest,
+  ShoppingListInviteRequest,
   ShoppingListShareResponse,
 } from "@/types/finance";
 
@@ -52,7 +52,7 @@ export const shoppingListApi = {
       data,
     ),
 
-  sendInvite: (listId: string, data: InviteSendRequest) =>
+  sendInvite: (listId: string, data: ShoppingListInviteRequest) =>
     api.post<ShoppingListInviteResponse>(
       `/shopping-lists/${listId}/invite`,
       data,
