@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   CalendarDays,
-  CheckCircle2,
   Loader2,
   Search,
   Trash2,

@@ -395,7 +395,7 @@ export interface ShoppingListInviteResponse {
   receiver_email: string | null;
 }
 
-export interface InviteSendRequest {
+export interface ShoppingListInviteRequest {
   user_email: string;
   role: "editor" | "viewer";
 }
