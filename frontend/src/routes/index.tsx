@@ -15,6 +15,8 @@ import { Leisure } from "@/pages/Leisure";
 import { LeisureDetail } from "@/pages/LeisureDetail";
 import { Chat } from "@/pages/Chat";
 import { ChatDetail } from "@/pages/ChatDetail";
+import { ShoppingLists } from "@/pages/ShoppingLists";
+import { ShoppingListDetail } from "@/pages/ShoppingListDetail";
 
 export const routes: RouteObject[] = [
   {
@@ -36,6 +38,8 @@ export const routes: RouteObject[] = [
       { path: "leisure/:id", element: <LeisureDetail /> },
       { path: "chat", element: <Chat /> },
       { path: "chat/:id", element: <ChatDetail /> },
+      { path: "checklist", element: <ShoppingLists /> },
+      { path: "checklist/:id", element: <ShoppingListDetail /> },
     ],
   },
   { path: "login", element: <Login /> },

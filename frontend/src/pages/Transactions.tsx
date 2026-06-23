@@ -140,11 +140,17 @@ export function Transactions() {
   };
 
   const handleTogglePaid = async (id: string, paid: boolean) => {
+    // optimistic update — atualiza estado local imediatamente
+    setExpenses((prev) => prev.map((e) => (e.id === id ? { ...e, paid } : e)));
+    // animação dispara automaticamente via ExpenseCard com Framer Motion
     try {
       await expenseApi.update(id, { paid });
-      load();
     } catch {
-      setToast({ message: "Erro ao atualizar", variant: "error" });
+      // rollback em caso de erro no servidor
+      setExpenses((prev) =>
+        prev.map((e) => (e.id === id ? { ...e, paid: !paid } : e)),
+      );
+      setToast({ message: "Erro ao atualizar status", variant: "error" });
     }
   };
 

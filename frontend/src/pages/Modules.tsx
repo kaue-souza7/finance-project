@@ -1,4 +1,4 @@
-import { MessageSquareText, Plane } from "lucide-react";
+import { ClipboardCheck, MessageSquareText, Plane } from "lucide-react";
 import { ModuleCard } from "@/components/ModuleCard";
 
 const modules = [
@@ -17,6 +17,14 @@ const modules = [
       "Converse com outros usuários sobre finanças com mensagens privadas.",
     comingSoon: false,
     to: "/chat",
+  },
+  {
+    icon: ClipboardCheck,
+    title: "CheckList de Mercado",
+    description:
+      "Crie e gerencie listas de compras do mercado.",
+    comingSoon: false,
+    to: "/checklist",
   },
 ];
 

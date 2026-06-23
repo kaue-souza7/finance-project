@@ -318,3 +318,117 @@ export interface ChatInviteResponse {
 export interface MessageSend {
   content: string;
 }
+
+export interface UserBrief {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface ShoppingListResponse {
+  id: string;
+  user_id: string;
+  title: string;
+  color: string;
+  icon: string;
+  completed_at: string | null;
+  item_count: number;
+  checked_count: number;
+  role: string;
+  shared_by: UserBrief | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ShoppingListCreate {
+  title: string;
+  color: string;
+  icon: string;
+}
+
+export interface ShoppingListUpdate {
+  title?: string;
+  color?: string;
+  icon?: string;
+}
+
+export interface ShoppingListItemResponse {
+  id: string;
+  shopping_list_id: string;
+  name: string;
+  quantity: string | null;
+  checked: boolean;
+  order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ShoppingListItemCreate {
+  name: string;
+  quantity?: string | null;
+  order?: number;
+}
+
+export interface ShoppingListItemUpdate {
+  name?: string;
+  quantity?: string | null;
+  order?: number;
+}
+
+export interface ShoppingListItemToggle {
+  checked: boolean;
+}
+
+export interface ShoppingListInviteResponse {
+  id: string;
+  shopping_list_id: string;
+  sender_id: string;
+  receiver_user_id: string;
+  role: string;
+  status: string;
+  created_at: string;
+  responded_at: string | null;
+  shopping_list_title: string | null;
+  sender_name: string | null;
+  sender_email: string | null;
+  receiver_name: string | null;
+  receiver_email: string | null;
+}
+
+export interface InviteSendRequest {
+  user_email: string;
+  role: "editor" | "viewer";
+}
+
+export interface ShoppingListShareResponse {
+  id: string;
+  shopping_list_id: string;
+  user_id: string;
+  role: string;
+  created_at: string;
+  created_by: string;
+  last_seen_at: string | null;
+  user_name: string | null;
+  user_email: string | null;
+}
+
+export interface UserSearchResponse {
+  id: string;
+  name: string;
+  email: string;
+  avatar_url: string | null;
+}
+
+export interface ShoppingListDetailResponse {
+  id: string;
+  user_id: string;
+  title: string;
+  color: string;
+  icon: string;
+  completed_at: string | null;
+  items: ShoppingListItemResponse[];
+  role: string;
+  shared_by: UserBrief | null;
+  created_at: string;
+  updated_at: string;
+}

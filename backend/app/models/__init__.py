@@ -11,6 +11,10 @@ from app.models.chat_participant import ChatParticipant
 from app.models.chat_invite import ChatInvite
 from app.models.message import Message
 from app.models.leisure_km import LeisureKmCalculation
+from app.models.shopping_list import ShoppingList
+from app.models.shopping_list_item import ShoppingListItem
+from app.models.shopping_list_invite import ShoppingListInvite
+from app.models.shopping_list_share import ShoppingListShare
 
 __all__ = [
     "User",
@@ -26,4 +30,8 @@ __all__ = [
     "ChatParticipant",
     "ChatInvite",
     "Message",
+    "ShoppingList",
+    "ShoppingListItem",
+    "ShoppingListInvite",
+    "ShoppingListShare",
 ]
