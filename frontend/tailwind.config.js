@@ -5,6 +5,14 @@ export default {
   theme: {
     extend: {
       colors: {
+        brand: {
+          600: "#4F46E5",
+          500: "#6366F1",
+          400: "#818CF8",
+          300: "#A5B4FC",
+          200: "#C7D2FE",
+          50: "#EEF2FF",
+        },
         surface: {
           DEFAULT: "#ffffff",
           dark: "#0f172a",
@@ -17,6 +25,9 @@ export default {
           DEFAULT: "#64748b",
           dark: "#94a3b8",
         },
+      },
+      boxShadow: {
+        "brand-sm": "0 1px 2px 0 rgb(79 70 229 / 0.05)",
       },
       width: {
         drawer: "16rem",

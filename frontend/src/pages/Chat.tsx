@@ -98,7 +98,7 @@ export function Chat() {
             <p className="text-sm text-slate-600 dark:text-slate-400">{error}</p>
             <button
               onClick={reload}
-              className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-slate-900 px-5 text-sm font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900"
+              className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-5 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700"
             >
               <RefreshCw size={14} />
               Tentar novamente
@@ -124,7 +124,7 @@ export function Chat() {
         <button
           type="button"
           onClick={() => setInviteOpen(true)}
-          className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-slate-900 px-5 text-sm font-medium text-white transition-colors hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+          className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-5 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700"
         >
           <Plus size={16} />
           Novo chat
@@ -163,7 +163,7 @@ export function Chat() {
             <button
               type="button"
               onClick={() => setInviteOpen(true)}
-              className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-slate-900 px-5 text-sm font-medium text-white transition-colors hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+              className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-5 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700"
             >
               <UserPlus size={16} />
               Convidar usuário

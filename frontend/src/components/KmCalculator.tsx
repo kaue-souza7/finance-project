@@ -176,7 +176,7 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
           <p className="text-sm text-slate-600 dark:text-slate-400">{error}</p>
           <button
             onClick={load}
-            className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-slate-900 px-5 text-sm font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900"
+            className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-5 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700"
           >
             <RefreshCw size={14} />
             Tentar novamente
@@ -205,7 +205,7 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
                   onChange={(e) => setOrigin(e.target.value)}
                   placeholder="Cidade de partida"
                   autoComplete="off"
-                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-white dark:focus:ring-white"
+                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                 />
               </div>
               <div>
@@ -218,7 +218,7 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
                   onChange={(e) => setDestination(e.target.value)}
                   placeholder="Cidade de destino"
                   autoComplete="off"
-                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-white dark:focus:ring-white"
+                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                 />
               </div>
             </div>
@@ -243,7 +243,7 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
                   className={`mt-1 w-full rounded-lg border bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:outline-none focus:ring-1 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 ${
                     distance.length > 0 && !isFinite(parsedDistance)
                       ? "border-rose-300 focus:border-rose-500 focus:ring-rose-500 dark:border-rose-700"
-                      : "border-slate-200 focus:border-slate-900 focus:ring-slate-900 dark:border-slate-600 dark:focus:border-white dark:focus:ring-white"
+                      : "border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/20 dark:border-slate-600 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                   }`}
                 />
               </div>
@@ -261,7 +261,7 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
                   className={`mt-1 w-full rounded-lg border bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:outline-none focus:ring-1 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 ${
                     consumption.length > 0 && !isFinite(parsedConsumption)
                       ? "border-rose-300 focus:border-rose-500 focus:ring-rose-500 dark:border-rose-700"
-                      : "border-slate-200 focus:border-slate-900 focus:ring-slate-900 dark:border-slate-600 dark:focus:border-white dark:focus:ring-white"
+                      : "border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/20 dark:border-slate-600 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                   }`}
                 />
               </div>
@@ -279,7 +279,7 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
                   className={`mt-1 w-full rounded-lg border bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:outline-none focus:ring-1 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 ${
                     fuelPrice.length > 0 && !isFinite(parsedFuelPrice)
                       ? "border-rose-300 focus:border-rose-500 focus:ring-rose-500 dark:border-rose-700"
-                      : "border-slate-200 focus:border-slate-900 focus:ring-slate-900 dark:border-slate-600 dark:focus:border-white dark:focus:ring-white"
+                      : "border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/20 dark:border-slate-600 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                   }`}
                 />
               </div>
@@ -297,7 +297,7 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
                   className={`mt-1 w-full rounded-lg border bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:outline-none focus:ring-1 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 ${
                     tolls.length > 0 && !isFinite(parsedTolls)
                       ? "border-rose-300 focus:border-rose-500 focus:ring-rose-500 dark:border-rose-700"
-                      : "border-slate-200 focus:border-slate-900 focus:ring-slate-900 dark:border-slate-600 dark:focus:border-white dark:focus:ring-white"
+                      : "border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/20 dark:border-slate-600 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                   }`}
                 />
               </div>
@@ -311,7 +311,7 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
                   onChange={(e) => setEstimatedTime(e.target.value)}
                   placeholder="Ex: 3h30"
                   autoComplete="off"
-                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-white dark:focus:ring-white"
+                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                 />
               </div>
               <div>
@@ -324,7 +324,7 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
                   value={numPeople}
                   onChange={(e) => setNumPeople(e.target.value)}
                   autoComplete="off"
-                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-white dark:focus:ring-white"
+                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                 />
               </div>
             </div>
@@ -340,7 +340,7 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
             <button
               onClick={handleSave}
               disabled={!canCalculate || saving}
-              className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-lg bg-slate-900 px-5 text-sm font-medium text-white transition-colors hover:bg-slate-800 disabled:opacity-50 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+              className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-5 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700 disabled:opacity-50"
             >
               {saving && <Loader2 size={16} className="animate-spin" />}
               {saving ? "Salvando..." : kmData ? "Atualizar cálculo" : "Calcular"}

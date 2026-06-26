@@ -147,7 +147,7 @@ export function LocationPicker({ value, onChange }: LocationPickerProps) {
           onFocus={() => suggestions.length > 0 && setOpen(true)}
           placeholder="Buscar local..."
           autoComplete="off"
-          className="mt-1 w-full rounded-lg border border-slate-200 bg-white py-3 pl-11 pr-10 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-white dark:focus:ring-white"
+          className="mt-1 w-full rounded-lg border border-slate-200 bg-white py-3 pl-11 pr-10 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
         />
         {searching && (
           <Loader2

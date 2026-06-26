@@ -31,6 +31,7 @@ from app.api.v1.shopping_list_shares import (
     router as shopping_list_shares_router,
 )
 from app.api.v1.users import router as users_router
+from app.api.v1.quotes import router as quotes_router
 
 
 def create_app() -> FastAPI:
@@ -102,6 +103,7 @@ def create_app() -> FastAPI:
     app.include_router(shopping_list_invites_router, prefix="/api/v1")
     app.include_router(shopping_list_shares_router, prefix="/api/v1")
     app.include_router(users_router, prefix="/api/v1")
+    app.include_router(quotes_router)
 
     return app
 

@@ -211,7 +211,7 @@ export function ShoppingListDetail() {
                 {isOwner && (
                   <button
                     onClick={() => setShowInviteModal(true)}
-                    className="flex min-h-[36px] items-center gap-1.5 rounded-lg bg-slate-900 px-3 text-xs font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+                    className="flex min-h-[36px] items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-3 text-xs font-medium text-white hover:from-indigo-700 hover:to-violet-700"
                   >
                     <UserPlus size={15} />
                     Compartilhar
@@ -255,7 +255,7 @@ export function ShoppingListDetail() {
               setEditItemTarget(null);
               setShowForm(true);
             }}
-            className="flex min-h-[36px] items-center gap-1.5 rounded-lg bg-slate-900 px-3 text-xs font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+            className="flex min-h-[36px] items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-3 text-xs font-medium text-white hover:from-indigo-700 hover:to-violet-700"
           >
             <Plus size={15} />
             Adicionar item
@@ -276,7 +276,7 @@ export function ShoppingListDetail() {
                   setEditItemTarget(null);
                   setShowForm(true);
                 }}
-                className="mt-4 inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-slate-900 px-3 text-xs font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+                className="mt-4 inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-3 text-xs font-medium text-white hover:from-indigo-700 hover:to-violet-700"
               >
                 <Plus size={15} />
                 Adicionar primeiro item

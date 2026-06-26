@@ -54,7 +54,7 @@ export function ConfirmDialog({
           <button
             onClick={onConfirm}
             disabled={loading}
-            className="flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-3 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200 sm:min-h-0 sm:px-4 sm:py-2"
+            className="flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-3 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700 disabled:opacity-50 sm:min-h-0 sm:px-4 sm:py-2"
           >
             {loading && <Loader2 size={16} className="animate-spin" />}
             Confirmar

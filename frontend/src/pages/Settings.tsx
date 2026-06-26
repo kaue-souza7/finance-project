@@ -91,7 +91,7 @@ function OptionCard({
       onClick={onClick}
       className={`flex flex-1 items-center gap-3 rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
         selected
-          ? "border-slate-900 bg-slate-900 text-white dark:border-white dark:bg-white dark:text-slate-900"
+          ? "border-indigo-600 bg-indigo-600 text-white dark:border-indigo-500 dark:bg-indigo-500 dark:text-white"
           : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-500"
       }`}
     >

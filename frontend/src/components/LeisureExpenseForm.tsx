@@ -129,7 +129,7 @@ export function LeisureExpenseForm({
                   maxLength={255}
                   placeholder="Ex: Jantar no restaurante"
                   autoComplete="off"
-                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-white dark:focus:ring-white"
+                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                 />
               </div>
 
@@ -140,7 +140,7 @@ export function LeisureExpenseForm({
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 transition-colors focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-white dark:focus:ring-white"
+                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                 >
                   {CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
@@ -165,7 +165,7 @@ export function LeisureExpenseForm({
                   className={`mt-1 w-full rounded-lg border bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:outline-none focus:ring-1 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 ${
                     amountError
                       ? "border-rose-300 focus:border-rose-500 focus:ring-rose-500 dark:border-rose-700 dark:focus:border-rose-400 dark:focus:ring-rose-400"
-                      : "border-slate-200 focus:border-slate-900 focus:ring-slate-900 dark:border-slate-600 dark:focus:border-white dark:focus:ring-white"
+                      : "border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/20 dark:border-slate-600 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                   }`}
                 />
                 {amountError && (
@@ -185,7 +185,7 @@ export function LeisureExpenseForm({
                   rows={3}
                   placeholder="Descrição opcional..."
                   autoComplete="off"
-                  className="mt-1 w-full resize-none rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-white dark:focus:ring-white"
+                  className="mt-1 w-full resize-none rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                 />
               </div>
 
@@ -195,7 +195,7 @@ export function LeisureExpenseForm({
                   id="paid"
                   checked={paid}
                   onChange={(e) => setPaid(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-white"
+                  className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-indigo-400/20"
                 />
                 <label
                   htmlFor="paid"
@@ -211,7 +211,7 @@ export function LeisureExpenseForm({
                   id="addToPlanning"
                   checked={addToPlanning}
                   onChange={(e) => setAddToPlanning(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-white"
+                  className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-indigo-400/20"
                 />
                 <label
                   htmlFor="addToPlanning"
@@ -237,7 +237,7 @@ export function LeisureExpenseForm({
               <button
                 type="submit"
                 disabled={saving || !title.trim() || amountError || !amount}
-                className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white transition-colors hover:bg-slate-800 disabled:opacity-50 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+                className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-4 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700 disabled:opacity-50"
               >
                 {saving && <Loader2 size={18} className="animate-spin" />}
                 {saving ? "Salvando..." : "Criar despesa"}

@@ -158,7 +158,7 @@ export function ReceivedInvitesModal({
                 </p>
                 <button
                   onClick={load}
-                  className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-slate-900 px-5 text-sm font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-5 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700"
                 >
                   <RefreshCw size={14} />
                   Tentar novamente

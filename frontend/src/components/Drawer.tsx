@@ -77,10 +77,10 @@ export function Drawer({ open, onClose }: DrawerProps) {
                 <NavLink
                   to={link.to}
                   onClick={onClose}
-                  className={({ isActive }) =>
+                    className={({ isActive }) =>
                     `flex min-h-[44px] items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors ${
                       isActive
-                        ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
+                        ? "bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white"
                         : "text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
                     }`
                   }
@@ -103,7 +103,7 @@ export function Drawer({ open, onClose }: DrawerProps) {
                   className={({ isActive }) =>
                     `flex min-h-[44px] items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors ${
                       isActive
-                        ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
+                        ? "bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white"
                         : "text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
                     }`
                   }
@@ -124,7 +124,7 @@ export function Drawer({ open, onClose }: DrawerProps) {
               className={({ isActive }) =>
                 `mb-2 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   isActive
-                    ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
+                    ? "bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white"
                     : "text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
                 }`
               }
@@ -147,7 +147,7 @@ export function Drawer({ open, onClose }: DrawerProps) {
             className={({ isActive }) =>
               `flex min-h-[44px] items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors ${
                 isActive
-                  ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
+                  ? "bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white"
                   : "text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
               }`
             }

@@ -101,7 +101,7 @@ export function Categories() {
         {!showForm && !editingId && (
           <button
             onClick={() => { resetForm(); setShowForm(true); }}
-            className="flex min-h-[44px] items-center gap-2 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+            className="flex min-h-[44px] items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-4 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700"
           >
             <Plus size={18} />
             Nova
@@ -127,14 +127,14 @@ export function Categories() {
                   placeholder="Nome da categoria"
                   maxLength={100}
                   autoComplete="off"
-                  className="flex-1 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-white dark:focus:ring-white"
+                  className="flex-1 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                 />
               </div>
               <div className="flex gap-2 sm:shrink-0">
                 <button
                   onClick={handleSave}
                   disabled={!name.trim()}
-                  className="flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200 sm:flex-initial"
+                  className="flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-4 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700 disabled:opacity-50 sm:flex-initial"
                 >
                   <Save size={16} />
                   Salvar
@@ -184,7 +184,7 @@ export function Categories() {
                       onClick={() => setIcon(item.key)}
                       className={`flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 transition-colors active:scale-95 sm:h-10 sm:w-10 dark:text-slate-400 ${
                         icon === item.key
-                          ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
+                          ? "bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white"
                           : "hover:bg-slate-100 dark:hover:bg-slate-700"
                       }`}
                       aria-label={`Ícone ${item.key}`}

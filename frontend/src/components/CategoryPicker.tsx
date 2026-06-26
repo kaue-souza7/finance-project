@@ -62,7 +62,7 @@ export function CategoryPicker({
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="mt-1 flex min-h-[48px] w-full items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm text-slate-900 transition-colors focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-white dark:focus:ring-white"
+        className="mt-1 flex min-h-[48px] w-full items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm text-slate-900 transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
       >
         {selectedCat ? (
           <>
