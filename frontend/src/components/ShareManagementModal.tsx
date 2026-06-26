@@ -347,7 +347,7 @@ export function ShareManagementModal({
                           <button
                             onClick={handleSendInvite}
                             disabled={sending}
-                            className="flex min-h-[40px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-slate-900 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+                            className="flex min-h-[40px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700 disabled:opacity-50"
                           >
                             {sending && (
                               <Loader2 size={14} className="animate-spin" />

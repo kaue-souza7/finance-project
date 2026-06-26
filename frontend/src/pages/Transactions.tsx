@@ -218,7 +218,7 @@ export function Transactions() {
                   setEditExpense(null);
                   setShowForm(!showForm);
                 }}
-                className="flex min-h-[44px] items-center gap-2 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+                className="flex min-h-[44px] items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-4 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700"
               >
                 <Plus size={18} />
                 Nova
@@ -322,7 +322,7 @@ export function Transactions() {
               onClick={() => setSortBy("name-asc")}
               className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
                 sortBy === "name-asc"
-                  ? "border-slate-900 bg-slate-900 text-white dark:border-white dark:bg-white dark:text-slate-900"
+                  ? "border-indigo-600 bg-indigo-600 text-white dark:border-indigo-500 dark:bg-indigo-500 dark:text-white"
                   : "border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
               }`}
             >
@@ -332,7 +332,7 @@ export function Transactions() {
               onClick={() => setSortBy("name-desc")}
               className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
                 sortBy === "name-desc"
-                  ? "border-slate-900 bg-slate-900 text-white dark:border-white dark:bg-white dark:text-slate-900"
+                  ? "border-indigo-600 bg-indigo-600 text-white dark:border-indigo-500 dark:bg-indigo-500 dark:text-white"
                   : "border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
               }`}
             >
@@ -342,7 +342,7 @@ export function Transactions() {
               onClick={() => setSortBy("amount-asc")}
               className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
                 sortBy === "amount-asc"
-                  ? "border-slate-900 bg-slate-900 text-white dark:border-white dark:bg-white dark:text-slate-900"
+                  ? "border-indigo-600 bg-indigo-600 text-white dark:border-indigo-500 dark:bg-indigo-500 dark:text-white"
                   : "border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
               }`}
             >
@@ -352,7 +352,7 @@ export function Transactions() {
               onClick={() => setSortBy("amount-desc")}
               className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
                 sortBy === "amount-desc"
-                  ? "border-slate-900 bg-slate-900 text-white dark:border-white dark:bg-white dark:text-slate-900"
+                  ? "border-indigo-600 bg-indigo-600 text-white dark:border-indigo-500 dark:bg-indigo-500 dark:text-white"
                   : "border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
               }`}
             >

@@ -100,7 +100,7 @@ export function LeisureParticipantsPanel({
           </p>
           <button
             onClick={load}
-            className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-slate-900 px-5 text-sm font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900"
+            className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-5 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700"
           >
             <RefreshCw size={14} />
             Tentar novamente
@@ -174,13 +174,13 @@ export function LeisureParticipantsPanel({
               placeholder="Email do usuário"
               required
               autoComplete="off"
-              className="w-full rounded-lg border border-slate-200 bg-white py-3 pl-9 pr-4 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-white dark:focus:ring-white"
+              className="w-full rounded-lg border border-slate-200 bg-white py-3 pl-9 pr-4 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
             />
           </div>
           <button
             type="submit"
             disabled={sending || !email.trim()}
-            className="inline-flex min-h-[48px] items-center gap-2 rounded-lg bg-slate-900 px-5 text-sm font-medium text-white transition-colors hover:bg-slate-800 disabled:opacity-50 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+            className="inline-flex min-h-[48px] items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-5 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700 disabled:opacity-50"
           >
             {sending ? (
               <Loader2 size={16} className="animate-spin" />
