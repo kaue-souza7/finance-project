@@ -1,3 +1,10 @@
+export function formatBrl(value: number): string {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(value);
+}
+
 export function parseBrl(value: string): number {
   const cleaned = value.trim();
   if (!cleaned) return NaN;

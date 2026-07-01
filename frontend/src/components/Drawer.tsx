@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
   CalendarCheck,
+  ChartNoAxesColumn,
   LayoutDashboard,
   LayoutGrid,
   PiggyBank,
@@ -95,6 +96,22 @@ export function Drawer({ open, onClose }: DrawerProps) {
           <div className="my-3 mx-3 border-t border-slate-200 dark:border-slate-700" />
 
           <ul className="space-y-1">
+            <li>
+              <NavLink
+                to="/simulador-metas"
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `flex min-h-[44px] items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white"
+                      : "text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                  }`
+                }
+              >
+                <ChartNoAxesColumn size={20} />
+                Simulador de Metas
+              </NavLink>
+            </li>
             {secondaryLinks.map((link) => (
               <li key={link.to}>
                 <NavLink
