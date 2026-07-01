@@ -1,5 +1,6 @@
-import { ClipboardCheck, MessageSquareText, Plane } from "lucide-react";
-import { ModuleCard } from "@/components/ModuleCard";
+import { ClipboardCheck, MessageSquareText, Plane, Target } from "lucide-react";
+import { ModuleCube } from "@/components/ModuleCube";
+import { ModuleCubeProvider } from "@/components/ModuleCubeContext";
 
 const modules = [
   {
@@ -26,12 +27,19 @@ const modules = [
     comingSoon: false,
     to: "/checklist",
   },
+  {
+    icon: Target,
+    title: "Simulador de Metas",
+    description:
+      "Simule objetivos financeiros, patrimônio, renda passiva e metas de investimento.",
+    comingSoon: true,
+  },
 ];
 
 export function Modules() {
   return (
     <section className="mx-auto max-w-5xl">
-      <div className="mb-6 flex flex-col gap-1">
+      <div className="mb-12 flex flex-col gap-1 sm:mb-16 lg:mb-20">
         <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
           Outros módulos
         </h1>
@@ -40,18 +48,20 @@ export function Modules() {
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {modules.map((mod) => (
-          <ModuleCard
-            key={mod.title}
-            icon={mod.icon}
-            title={mod.title}
-            description={mod.description}
-            comingSoon={mod.comingSoon}
-            to={mod.to}
-          />
-        ))}
-      </div>
+      <ModuleCubeProvider>
+        <div className="grid gap-x-4 gap-y-20 sm:gap-y-8 lg:gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+          {modules.map((mod) => (
+            <ModuleCube
+              key={mod.title}
+              icon={mod.icon}
+              title={mod.title}
+              description={mod.description}
+              comingSoon={mod.comingSoon}
+              to={mod.to}
+            />
+          ))}
+        </div>
+      </ModuleCubeProvider>
     </section>
   );
 }
