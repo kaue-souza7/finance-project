@@ -10,8 +10,9 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
+  type TooltipProps,
 } from "recharts";
-import { TrendingUp, DollarSign, PiggyBank, Percent, BarChart3 } from "lucide-react";
+import { TrendingUp, DollarSign, PiggyBank, Percent, BarChart3, type LucideIcon } from "lucide-react";
 import type { SimulationResult } from "@/types/simulator";
 import { formatBrl } from "@/utils/format";
 
@@ -30,7 +31,7 @@ function ResultCard({
   value,
   highlight,
 }: {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   label: string;
   value: string;
   highlight?: boolean;
@@ -92,22 +93,14 @@ export function SimulationResult({ result }: SimulationResultProps) {
     [result],
   );
 
-  const tooltipContent = ({
-    active,
-    payload,
-    label,
-  }: {
-    active?: boolean;
-    payload?: Array<{ name: string; value: number; color: string }>;
-    label?: string;
-  }) => {
+  const tooltipContent: TooltipProps["content"] = ({ active, payload, label }) => {
     if (!active || !payload) return null;
     return (
       <div className="rounded-lg border border-slate-200 bg-white p-3 text-xs shadow-lg dark:border-slate-600 dark:bg-slate-800">
         <p className="mb-1 font-medium text-slate-700 dark:text-slate-300">{label}</p>
         {payload.map((p) => (
-          <p key={p.name} style={{ color: p.color }}>
-            {p.name}: {formatBrl(p.value)}
+          <p key={p.name} style={{ color: p.color ?? undefined }}>
+            {p.name}: {p.value !== undefined ? formatBrl(Number(p.value)) : ""}
           </p>
         ))}
       </div>
