@@ -1,4 +1,4 @@
-import { ClipboardCheck, MessageSquareText, Plane, Target } from "lucide-react";
+import { ClipboardCheck, MessageSquareText, Plane } from "lucide-react";
 import { ModuleCube } from "@/components/ModuleCube";
 import { ModuleCubeProvider } from "@/components/ModuleCubeContext";
 
@@ -26,13 +26,6 @@ const modules = [
       "Crie e gerencie listas de compras do mercado.",
     comingSoon: false,
     to: "/checklist",
-  },
-  {
-    icon: Target,
-    title: "Simulador de Metas",
-    description:
-      "Simule objetivos financeiros, patrimônio, renda passiva e metas de investimento.",
-    comingSoon: true,
   },
 ];
 
