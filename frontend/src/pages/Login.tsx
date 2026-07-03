@@ -3,9 +3,10 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import logoSrc from "@/assets/logo/finance-logo.png";
+import { WebAuthnLoginButton } from "@/webauthn/components/WebAuthnLoginButton";
 
 export function Login() {
-  const { login, isAuthenticated, loading: authLoading } = useAuth();
+  const { login, webauthnLogin, isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -80,6 +81,31 @@ export function Login() {
             <p className="mt-1.5 text-sm text-slate-500 dark:text-slate-400">
               Entre para gerenciar suas finanças
             </p>
+          </div>
+
+          {/* Biometric login */}
+          <div className="mb-5">
+            <WebAuthnLoginButton
+              onToken={async (token) => {
+                try {
+                  await webauthnLogin(token);
+                  navigate("/", { replace: true });
+                } catch {
+                  setError("Erro ao fazer login com biometria");
+                }
+              }}
+            />
+          </div>
+
+          <div className="relative mb-5">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-200 dark:border-slate-600" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-slate-400 dark:bg-slate-900 dark:text-slate-500">
+                ou
+              </span>
+            </div>
           </div>
 
           {/* Error */}

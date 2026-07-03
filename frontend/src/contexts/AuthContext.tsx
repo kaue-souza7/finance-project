@@ -9,6 +9,7 @@ interface AuthContextValue {
   loading: boolean;
   isAuthenticated: boolean;
   login: (data: LoginRequest) => Promise<void>;
+  webauthnLogin: (token: string) => Promise<void>;
   register: (data: RegisterRequest) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
@@ -123,6 +124,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(me);
   }, []);
 
+  const webauthnLogin = useCallback(async (token: string) => {
+    setToken(token);
+    try {
+      const me = await authFetch<UserResponse>("/me");
+      setUser(me);
+    } catch {
+      clearToken();
+      throw new Error("Erro ao validar sessão biométrica");
+    }
+  }, []);
+
   const logout = useCallback(() => {
     clearToken();
     setUser(null);
@@ -135,6 +147,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         loading,
         isAuthenticated: !!user,
         login,
+        webauthnLogin,
         register,
         logout,
         refreshUser: validateSession,

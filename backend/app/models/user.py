@@ -79,6 +79,9 @@ class User(Base):
         foreign_keys="ShoppingListShare.created_by",
         back_populates="creator",
     )
+    webauthn_credentials = relationship(
+        "WebAuthnCredential", back_populates="user", cascade="all, delete-orphan"
+    )
 
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
