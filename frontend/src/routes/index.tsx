@@ -1,27 +1,29 @@
+import { lazy } from "react";
 import { Navigate, type RouteObject } from "react-router-dom";
 import { AppLayout } from "@/layouts/AppLayout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { Categories } from "@/pages/Categories";
 import { Dashboard } from "@/pages/Dashboard";
-import { Investments } from "@/pages/Investments";
 import { Login } from "@/pages/Login";
-import { Plannings } from "@/pages/Plannings";
-import { Profile } from "@/pages/Profile";
 import { Register } from "@/pages/Register";
-import { Settings } from "@/pages/Settings";
-import { Transactions } from "@/pages/Transactions";
-import { Modules } from "@/pages/Modules";
-import { GoalsSimulator } from "@/pages/GoalsSimulator";
-import { GoalSimulatorHome } from "@/pages/simulador/GoalSimulatorHome";
-import { JurosCompostos } from "@/pages/simulador/JurosCompostos";
-import { AcumularPatrimonio } from "@/pages/simulador/AcumularPatrimonio";
-import { RendaPassiva } from "@/pages/simulador/RendaPassiva";
-import { Leisure } from "@/pages/Leisure";
-import { LeisureDetail } from "@/pages/LeisureDetail";
-import { Chat } from "@/pages/Chat";
-import { ChatDetail } from "@/pages/ChatDetail";
-import { ShoppingLists } from "@/pages/ShoppingLists";
-import { ShoppingListDetail } from "@/pages/ShoppingListDetail";
+
+const Categories = lazy(() => import("@/pages/Categories").then((m) => ({ default: m.Categories })));
+const Investments = lazy(() => import("@/pages/Investments").then((m) => ({ default: m.Investments })));
+const Plannings = lazy(() => import("@/pages/Plannings").then((m) => ({ default: m.Plannings })));
+const Profile = lazy(() => import("@/pages/Profile").then((m) => ({ default: m.Profile })));
+const Settings = lazy(() => import("@/pages/Settings").then((m) => ({ default: m.Settings })));
+const Transactions = lazy(() => import("@/pages/Transactions").then((m) => ({ default: m.Transactions })));
+const Modules = lazy(() => import("@/pages/Modules").then((m) => ({ default: m.Modules })));
+const GoalsSimulator = lazy(() => import("@/pages/GoalsSimulator").then((m) => ({ default: m.GoalsSimulator })));
+const GoalSimulatorHome = lazy(() => import("@/pages/simulador/GoalSimulatorHome").then((m) => ({ default: m.GoalSimulatorHome })));
+const JurosCompostos = lazy(() => import("@/pages/simulador/JurosCompostos").then((m) => ({ default: m.JurosCompostos })));
+const AcumularPatrimonio = lazy(() => import("@/pages/simulador/AcumularPatrimonio").then((m) => ({ default: m.AcumularPatrimonio })));
+const RendaPassiva = lazy(() => import("@/pages/simulador/RendaPassiva").then((m) => ({ default: m.RendaPassiva })));
+const Leisure = lazy(() => import("@/pages/Leisure").then((m) => ({ default: m.Leisure })));
+const LeisureDetail = lazy(() => import("@/pages/LeisureDetail").then((m) => ({ default: m.LeisureDetail })));
+const Chat = lazy(() => import("@/pages/Chat").then((m) => ({ default: m.Chat })));
+const ChatDetail = lazy(() => import("@/pages/ChatDetail").then((m) => ({ default: m.ChatDetail })));
+const ShoppingLists = lazy(() => import("@/pages/ShoppingLists").then((m) => ({ default: m.ShoppingLists })));
+const ShoppingListDetail = lazy(() => import("@/pages/ShoppingListDetail").then((m) => ({ default: m.ShoppingListDetail })));
 
 export const routes: RouteObject[] = [
   {

@@ -72,4 +72,3 @@ export function getCategoryIcon(
 }
 
 export { iconList };
-export type { iconMap };

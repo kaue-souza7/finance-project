@@ -7,7 +7,7 @@ import { ShareManagementModal } from "@/components/ShareManagementModal";
 import { ShoppingListItem } from "@/components/ShoppingListItem";
 import { ShoppingListItemForm } from "@/components/ShoppingListItemForm";
 import { Skeleton, SkeletonCard } from "@/components/Skeleton";
-import { Toast } from "@/components/Toast";
+import { useToast } from "@/contexts/ToastContext";
 import { shoppingListApi } from "@/services/shoppingList";
 import { getCategoryIcon } from "@/utils/categoryIcons";
 import type {
@@ -27,10 +27,7 @@ export function ShoppingListDetail() {
   const [deleteTarget, setDeleteTarget] =
     useState<ShoppingListItemResponse | null>(null);
   const [deleting, setDeleting] = useState(false);
-  const [toast, setToast] = useState<{
-    message: string;
-    variant: "success" | "error";
-  } | null>(null);
+  const { toast: showToast } = useToast();
   const [showInviteModal, setShowInviteModal] = useState(false);
 
   const load = useCallback(async () => {
@@ -41,7 +38,7 @@ export function ShoppingListDetail() {
       setList(data);
     } catch (err) {
       console.error("Erro ao carregar lista:", err);
-      setToast({ message: "Erro ao carregar lista", variant: "error" });
+      showToast("Erro ao carregar lista", "error");
     } finally {
       setLoading(false);
     }
@@ -76,7 +73,7 @@ export function ShoppingListDetail() {
     } catch (err) {
       console.error("Erro ao atualizar item:", err);
       setList({ ...list, items: prevItems, completed_at: prevCompletedAt });
-      setToast({ message: "Erro ao atualizar item", variant: "error" });
+      showToast("Erro ao atualizar item", "error");
     }
   };
 
@@ -98,12 +95,12 @@ export function ShoppingListDetail() {
 
     try {
       await shoppingListApi.deleteItem(id, deleteTarget.id);
-      setToast({ message: "Item excluído", variant: "success" });
+      showToast("Item excluído", "success");
       setDeleteTarget(null);
     } catch (err) {
       console.error("Erro ao excluir item:", err);
       setList({ ...list, items: prevItems, completed_at: prevCompletedAt });
-      setToast({ message: "Erro ao excluir item", variant: "error" });
+      showToast("Erro ao excluir item", "error");
     } finally {
       setDeleting(false);
     }
@@ -165,7 +162,7 @@ export function ShoppingListDetail() {
       <div className="mb-6">
         <button
           onClick={() => navigate("/checklist")}
-          className="mb-3 flex min-h-[36px] items-center gap-1 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+          className="mb-3 flex min-h-[44px] items-center gap-1 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
         >
           <ArrowLeft size={16} />
           Voltar
@@ -211,7 +208,7 @@ export function ShoppingListDetail() {
                 {isOwner && (
                   <button
                     onClick={() => setShowInviteModal(true)}
-                    className="flex min-h-[36px] items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-3 text-xs font-medium text-white hover:from-indigo-700 hover:to-violet-700"
+                    className="flex min-h-[44px] items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-3 text-xs font-medium text-white hover:from-indigo-700 hover:to-violet-700"
                   >
                     <UserPlus size={15} />
                     Compartilhar
@@ -255,7 +252,7 @@ export function ShoppingListDetail() {
               setEditItemTarget(null);
               setShowForm(true);
             }}
-            className="flex min-h-[36px] items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-3 text-xs font-medium text-white hover:from-indigo-700 hover:to-violet-700"
+            className="flex min-h-[44px] items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-3 text-xs font-medium text-white hover:from-indigo-700 hover:to-violet-700"
           >
             <Plus size={15} />
             Adicionar item
@@ -276,7 +273,7 @@ export function ShoppingListDetail() {
                   setEditItemTarget(null);
                   setShowForm(true);
                 }}
-                className="mt-4 inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-3 text-xs font-medium text-white hover:from-indigo-700 hover:to-violet-700"
+                className="mt-4 inline-flex min-h-[44px] items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-3 text-xs font-medium text-white hover:from-indigo-700 hover:to-violet-700"
               >
                 <Plus size={15} />
                 Adicionar primeiro item
@@ -339,12 +336,7 @@ export function ShoppingListDetail() {
         onCancel={() => setDeleteTarget(null)}
       />
 
-      <Toast
-        open={!!toast}
-        message={toast?.message ?? ""}
-        variant={toast?.variant ?? "success"}
-        onClose={() => setToast(null)}
-      />
+
     </section>
   );
 }

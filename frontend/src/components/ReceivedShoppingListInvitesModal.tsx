@@ -10,7 +10,7 @@ import {
   X,
 } from "lucide-react";
 import { Card } from "@/components/Card";
-import { Toast } from "@/components/Toast";
+import { useToast } from "@/contexts/ToastContext";
 import { shoppingListApi } from "@/services/shoppingList";
 import type { ShoppingListInviteResponse } from "@/types/finance";
 
@@ -40,10 +40,7 @@ export function ReceivedShoppingListInvitesModal({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [acting, setActing] = useState<string | null>(null);
-  const [toast, setToast] = useState<{
-    message: string;
-    variant: "success" | "error";
-  } | null>(null);
+  const { toast } = useToast();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -66,14 +63,11 @@ export function ReceivedShoppingListInvitesModal({
     setActing(inviteId);
     try {
       await shoppingListApi.acceptInvite(inviteId);
-      setToast({ message: "Convite aceito!", variant: "success" });
+      toast("Convite aceito!", "success");
       load();
       onUpdate();
     } catch (e) {
-      setToast({
-        message: e instanceof Error ? e.message : "Erro ao aceitar convite",
-        variant: "error",
-      });
+      toast(e instanceof Error ? e.message : "Erro ao aceitar convite", "error");
     } finally {
       setActing(null);
     }
@@ -83,14 +77,11 @@ export function ReceivedShoppingListInvitesModal({
     setActing(inviteId);
     try {
       await shoppingListApi.declineInvite(inviteId);
-      setToast({ message: "Convite recusado", variant: "success" });
+      toast("Convite recusado", "success");
       load();
       onUpdate();
     } catch (e) {
-      setToast({
-        message: e instanceof Error ? e.message : "Erro ao recusar convite",
-        variant: "error",
-      });
+      toast(e instanceof Error ? e.message : "Erro ao recusar convite", "error");
     } finally {
       setActing(null);
     }
@@ -243,12 +234,7 @@ export function ReceivedShoppingListInvitesModal({
         </div>
       </div>
 
-      <Toast
-        open={toast !== null}
-        message={toast?.message ?? ""}
-        variant={toast?.variant}
-        onClose={() => setToast(null)}
-      />
+
     </>
   );
 }

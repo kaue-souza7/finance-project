@@ -2,12 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .safe-area-inset-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .safe-area-inset-left {
+    padding-left: env(safe-area-inset-left, 0px);
+  }
+
+  .safe-area-inset-right {
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+}
+
 @layer base {
   :root {
     --spacing-section: 1.5rem;
     --spacing-card: 1.5rem;
     --size-text: 1rem;
     --size-icon: 1.25rem;
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+    --sal: env(safe-area-inset-left, 0px);
+    --sar: env(safe-area-inset-right, 0px);
     color-scheme: light;
   }
 
@@ -25,12 +47,37 @@
   html {
     @apply antialiased;
     -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   html.no-scroll {
     overflow: hidden;
     position: fixed;
     width: 100%;
+  }
+
+  body {
+    @apply bg-surface text-slate-900 transition-colors duration-200;
+    width: 100%;
+    overflow-x: hidden;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  :root.dark body {
+    @apply bg-surface-dark text-slate-100;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font-size: 16px;
   }
 
   @keyframes skeleton {
@@ -51,25 +98,37 @@
   .animate-toast {
     animation: toast-in 0.25s ease-out;
   }
+}
 
-  body {
-    @apply bg-surface text-slate-900 transition-colors duration-200;
-    overscroll-behavior: none;
+@layer components {
+  .scrollable {
     -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
-  :root.dark body {
-    @apply bg-surface-dark text-slate-100;
+  .interactive {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
-  * {
-    -webkit-tap-highlight-color: transparent;
+  .touch-feedback {
+    transition: opacity 0.1s ease;
   }
 
-  input,
-  select,
-  textarea,
-  button {
-    font-size: 16px;
+  .touch-feedback:active {
+    opacity: 0.75;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  button:active:not(:disabled),
+  a:active:not(:disabled),
+  [role="button"]:active:not(:disabled),
+  [role="tab"]:active:not(:disabled),
+  [role="menuitem"]:active:not(:disabled) {
+    opacity: 0.75;
+    transition: opacity 0.1s ease;
   }
 }

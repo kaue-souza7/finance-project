@@ -16,7 +16,7 @@ import { Card, CardTitle, CardValue } from "@/components/Card";
 import { LeisureForm } from "@/components/LeisureForm";
 import { ReceivedInvitesModal } from "@/components/ReceivedInvitesModal";
 import { Skeleton, SkeletonCard } from "@/components/Skeleton";
-import { Toast } from "@/components/Toast";
+import { useToast } from "@/contexts/ToastContext";
 import { leisureApi } from "@/services/leisure";
 import { leisureInviteApi } from "@/services/leisureInvite";
 import { MONTHS } from "@/utils/date";
@@ -42,10 +42,7 @@ export function Leisure() {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const [toast, setToast] = useState<{
-    message: string;
-    variant: "success" | "error";
-  } | null>(null);
+  const { toast: showToast } = useToast();
 
   const [showInvites, setShowInvites] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
@@ -87,7 +84,7 @@ export function Leisure() {
   }, [load, loadInviteCount]);
 
   const handleFormSuccess = useCallback(() => {
-    setToast({ message: "Lazer criado com sucesso!", variant: "success" });
+    showToast("Lazer criado com sucesso!", "success");
     setShowForm(false);
     load();
   }, [load]);
@@ -615,12 +612,7 @@ export function Leisure() {
         onUpdate={handleInvitesUpdate}
       />
 
-      <Toast
-        open={toast !== null}
-        message={toast?.message ?? ""}
-        variant={toast?.variant}
-        onClose={() => setToast(null)}
-      />
+
     </section>
   );
 }

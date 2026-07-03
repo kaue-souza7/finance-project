@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Loader2, Search, UserPlus, X } from "lucide-react";
-import { Toast } from "@/components/Toast";
+import { useToast } from "@/contexts/ToastContext";
 import { shoppingListApi } from "@/services/shoppingList";
 import { userApi } from "@/services/user";
 import type { UserSearchResponse } from "@/types/finance";
@@ -26,10 +26,7 @@ export function InviteUsersToShoppingListModal({
   );
   const [role, setRole] = useState<"editor" | "viewer">("editor");
   const [sending, setSending] = useState(false);
-  const [toast, setToast] = useState<{
-    message: string;
-    variant: "success" | "error";
-  } | null>(null);
+  const { toast } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -77,16 +74,13 @@ export function InviteUsersToShoppingListModal({
         user_email: selectedUser.email,
         role,
       });
-      setToast({ message: "Convite enviado!", variant: "success" });
+      toast("Convite enviado!", "success");
       setSelectedUser(null);
       setQuery("");
       setResults([]);
       onSuccess();
     } catch (e) {
-      setToast({
-        message: e instanceof Error ? e.message : "Erro ao enviar convite",
-        variant: "error",
-      });
+      toast(e instanceof Error ? e.message : "Erro ao enviar convite", "error");
     } finally {
       setSending(false);
     }
@@ -242,12 +236,7 @@ export function InviteUsersToShoppingListModal({
         </div>
       </div>
 
-      <Toast
-        open={toast !== null}
-        message={toast?.message ?? ""}
-        variant={toast?.variant}
-        onClose={() => setToast(null)}
-      />
+
     </>
   );
 }

@@ -75,6 +75,8 @@ export function Register() {
             <img
               src={logoSrc}
               alt="Finance"
+              width={192}
+              height={108}
               className="h-auto w-48 select-none rounded-xl object-contain"
               draggable={false}
             />

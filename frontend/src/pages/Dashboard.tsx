@@ -11,7 +11,7 @@ import {
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { MonthSelector } from "@/components/MonthSelector";
 import { SkeletonCard } from "@/components/Skeleton";
-import { Toast } from "@/components/Toast";
+import { useToast } from "@/contexts/ToastContext";
 import { Card, CardTitle, CardValue } from "@/components/Card";
 import { expenseApi } from "@/services/expense";
 import { planningApi } from "@/services/planning";
@@ -60,7 +60,7 @@ export function Dashboard() {
   const { plan, actualExpenses, loading, error, reload } = useMonthlyData(month, year);
   const [copying, setCopying] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [toast, setToast] = useState<{ message: string; variant: "success" | "error" } | null>(null);
+  const { toast: showToast } = useToast();
 
   const hasPlanning = plan !== null;
 
@@ -89,10 +89,7 @@ export function Dashboard() {
       setShowConfirm(false);
       reload();
     } catch (err) {
-      setToast({
-        message: err instanceof Error ? err.message : "Erro ao copiar",
-        variant: "error",
-      });
+      showToast(err instanceof Error ? err.message : "Erro ao copiar", "error");
     } finally {
       setCopying(false);
     }
@@ -272,12 +269,7 @@ export function Dashboard() {
         onCancel={() => setShowConfirm(false)}
       />
 
-      <Toast
-        open={!!toast}
-        message={toast?.message ?? ""}
-        variant={toast?.variant ?? "success"}
-        onClose={() => setToast(null)}
-      />
+
     </section>
   );
 }

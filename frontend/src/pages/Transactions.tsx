@@ -6,7 +6,7 @@ import { ExpenseCard } from "@/components/ExpenseCard";
 import { ExpenseForm } from "@/components/ExpenseForm";
 import { MonthSelector } from "@/components/MonthSelector";
 import { SkeletonCard } from "@/components/Skeleton";
-import { Toast } from "@/components/Toast";
+import { useToast } from "@/contexts/ToastContext";
 import { planningApi } from "@/services/planning";
 import { expenseApi } from "@/services/expense";
 import { MONTHS, getCurrentMonth, nextMonth, prevMonth } from "@/utils/date";
@@ -45,10 +45,7 @@ export function Transactions() {
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editExpense, setEditExpense] = useState<ExpenseResponse | null>(null);
-  const [toast, setToast] = useState<{
-    message: string;
-    variant: "success" | "error";
-  } | null>(null);
+  const { toast: showToast } = useToast();
   const [copying, setCopying] = useState(false);
   const [showCopyConfirm, setShowCopyConfirm] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>("name-asc");
@@ -65,10 +62,7 @@ export function Transactions() {
         setExpenses([]);
       }
     } catch {
-      setToast({
-        message: "Erro ao carregar despesas",
-        variant: "error",
-      });
+      showToast("Erro ao carregar despesas", "error");
     } finally {
       setLoading(false);
     }
@@ -98,14 +92,11 @@ export function Transactions() {
     setSaving(true);
     try {
       await expenseApi.create(data as ExpenseCreate);
-      setToast({ message: "Despesa adicionada", variant: "success" });
+      showToast("Despesa adicionada", "success");
       setShowForm(false);
       load();
     } catch (err) {
-      setToast({
-        message: err instanceof Error ? err.message : "Erro ao criar",
-        variant: "error",
-      });
+      showToast(err instanceof Error ? err.message : "Erro ao criar", "error");
     } finally {
       setSaving(false);
     }
@@ -116,14 +107,11 @@ export function Transactions() {
     setSaving(true);
     try {
       await expenseApi.update(editExpense.id, data as ExpenseUpdate);
-      setToast({ message: "Despesa atualizada", variant: "success" });
+      showToast("Despesa atualizada", "success");
       setEditExpense(null);
       load();
     } catch (err) {
-      setToast({
-        message: err instanceof Error ? err.message : "Erro ao atualizar",
-        variant: "error",
-      });
+      showToast(err instanceof Error ? err.message : "Erro ao atualizar", "error");
     } finally {
       setSaving(false);
     }
@@ -132,10 +120,10 @@ export function Transactions() {
   const handleDelete = async (id: string) => {
     try {
       await expenseApi.delete(id);
-      setToast({ message: "Despesa excluída", variant: "success" });
+      showToast("Despesa excluída", "success");
       load();
     } catch {
-      setToast({ message: "Erro ao excluir", variant: "error" });
+      showToast("Erro ao excluir", "error");
     }
   };
 
@@ -150,7 +138,7 @@ export function Transactions() {
       setExpenses((prev) =>
         prev.map((e) => (e.id === id ? { ...e, paid: !paid } : e)),
       );
-      setToast({ message: "Erro ao atualizar status", variant: "error" });
+      showToast("Erro ao atualizar status", "error");
     }
   };
 
@@ -159,10 +147,7 @@ export function Transactions() {
     try {
       await expenseApi.copyFromPrevious(month, year);
       setShowCopyConfirm(false);
-      setToast({
-        message: "Despesas copiadas com sucesso",
-        variant: "success",
-      });
+      showToast("Despesas copiadas com sucesso", "success");
       load();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";
@@ -170,7 +155,7 @@ export function Transactions() {
       if (msg.includes("No planning found")) {
         friendly = "Nenhum planejamento encontrado no mês anterior";
       }
-      setToast({ message: friendly, variant: "error" });
+      showToast(friendly, "error");
     } finally {
       setCopying(false);
     }
@@ -394,12 +379,7 @@ export function Transactions() {
         onCancel={() => setShowCopyConfirm(false)}
       />
 
-      <Toast
-        open={!!toast}
-        message={toast?.message ?? ""}
-        variant={toast?.variant ?? "success"}
-        onClose={() => setToast(null)}
-      />
+
     </section>
   );
 }

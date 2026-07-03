@@ -1,11 +1,30 @@
 interface SkeletonProps {
   className?: string;
+  style?: React.CSSProperties;
 }
 
-export function Skeleton({ className = "" }: SkeletonProps) {
+export function Skeleton({ className = "", style }: SkeletonProps) {
   return (
     <div
       className={`animate-skeleton rounded-md bg-slate-200 dark:bg-slate-700 ${className}`}
+      style={style}
+    />
+  );
+}
+
+export function SkeletonLine({ className = "" }: { className?: string }) {
+  return <Skeleton className={`h-3 w-full ${className}`} />;
+}
+
+export function SkeletonTitle({ className = "" }: { className?: string }) {
+  return <Skeleton className={`h-7 w-48 ${className}`} />;
+}
+
+export function SkeletonCircle({ size = 40 }: { size?: number }) {
+  return (
+    <Skeleton
+      className="rounded-full shrink-0"
+      style={{ width: size, height: size }}
     />
   );
 }

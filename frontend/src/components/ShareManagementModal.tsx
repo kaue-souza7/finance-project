@@ -9,7 +9,7 @@ import {
   X,
 } from "lucide-react";
 import { Card } from "@/components/Card";
-import { Toast } from "@/components/Toast";
+import { useToast } from "@/contexts/ToastContext";
 import { shoppingListApi } from "@/services/shoppingList";
 import { userApi } from "@/services/user";
 import type {
@@ -58,10 +58,7 @@ export function ShareManagementModal({
   const [sending, setSending] = useState(false);
 
   const [actingId, setActingId] = useState<string | null>(null);
-  const [toast, setToast] = useState<{
-    message: string;
-    variant: "success" | "error";
-  } | null>(null);
+  const { toast } = useToast();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
@@ -76,10 +73,7 @@ export function ShareManagementModal({
       setShares(sharesData);
       setPendingInvites(invitesData);
     } catch (e) {
-      setToast({
-        message: e instanceof Error ? e.message : "Erro ao carregar dados",
-        variant: "error",
-      });
+      toast(e instanceof Error ? e.message : "Erro ao carregar dados", "error");
     } finally {
       setLoading(false);
     }
@@ -131,16 +125,13 @@ export function ShareManagementModal({
         role: inviteRole,
       });
       setPendingInvites((prev) => [invite, ...prev]);
-      setToast({ message: "Convite enviado!", variant: "success" });
+      toast("Convite enviado!", "success");
       setSelectedUser(null);
       setQuery("");
       setResults([]);
       onUpdate();
     } catch (e) {
-      setToast({
-        message: e instanceof Error ? e.message : "Erro ao enviar convite",
-        variant: "error",
-      });
+      toast(e instanceof Error ? e.message : "Erro ao enviar convite", "error");
     } finally {
       setSending(false);
     }
@@ -158,13 +149,10 @@ export function ShareManagementModal({
       setShares((prev) =>
         prev.map((s) => (s.id === shareId ? { ...s, role: updated.role } : s)),
       );
-      setToast({ message: "Permissão atualizada", variant: "success" });
+      toast("Permissão atualizada", "success");
       onUpdate();
     } catch (e) {
-      setToast({
-        message: e instanceof Error ? e.message : "Erro ao atualizar permissão",
-        variant: "error",
-      });
+      toast(e instanceof Error ? e.message : "Erro ao atualizar permissão", "error");
     } finally {
       setActingId(null);
     }
@@ -175,16 +163,10 @@ export function ShareManagementModal({
     try {
       await shoppingListApi.removeShare(listId, shareId);
       setShares((prev) => prev.filter((s) => s.id !== shareId));
-      setToast({
-        message: "Compartilhamento removido",
-        variant: "success",
-      });
+      toast("Compartilhamento removido", "success");
       onUpdate();
     } catch (e) {
-      setToast({
-        message: e instanceof Error ? e.message : "Erro ao remover compartilhamento",
-        variant: "error",
-      });
+      toast(e instanceof Error ? e.message : "Erro ao remover compartilhamento", "error");
     } finally {
       setActingId(null);
     }
@@ -195,13 +177,10 @@ export function ShareManagementModal({
     try {
       await shoppingListApi.cancelInvite(listId, inviteId);
       setPendingInvites((prev) => prev.filter((i) => i.id !== inviteId));
-      setToast({ message: "Convite cancelado", variant: "success" });
+      toast("Convite cancelado", "success");
       onUpdate();
     } catch (e) {
-      setToast({
-        message: e instanceof Error ? e.message : "Erro ao cancelar convite",
-        variant: "error",
-      });
+      toast(e instanceof Error ? e.message : "Erro ao cancelar convite", "error");
     } finally {
       setActingId(null);
     }
@@ -502,12 +481,7 @@ export function ShareManagementModal({
         </div>
       </div>
 
-      <Toast
-        open={toast !== null}
-        message={toast?.message ?? ""}
-        variant={toast?.variant}
-        onClose={() => setToast(null)}
-      />
+
     </>
   );
 }

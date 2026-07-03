@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Plus, Save, Tags, Trash2, X } from "lucide-react";
 import { Card } from "@/components/Card";
-import { Toast } from "@/components/Toast";
+import { Skeleton } from "@/components/Skeleton";
+import { useToast } from "@/contexts/ToastContext";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { categoryApi } from "@/services/category";
 import { getCategoryIcon, iconList } from "@/utils/categoryIcons";
@@ -22,10 +23,7 @@ export function Categories() {
   const [icon, setIcon] = useState("home");
   const [showForm, setShowForm] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
-  const [toast, setToast] = useState<{
-    message: string;
-    variant: "success" | "error";
-  } | null>(null);
+  const { toast: showToast } = useToast();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -33,7 +31,7 @@ export function Categories() {
       const cats = await categoryApi.list();
       setCategories(cats);
     } catch {
-      setToast({ message: "Erro ao carregar categorias", variant: "error" });
+      showToast("Erro ao carregar categorias", "error");
     } finally {
       setLoading(false);
     }
@@ -60,19 +58,16 @@ export function Categories() {
     try {
       if (editingId) {
         await categoryApi.update(editingId, { name: name.trim(), color, icon });
-        setToast({ message: "Categoria atualizada", variant: "success" });
+        showToast("Categoria atualizada", "success");
       } else {
         await categoryApi.create({ name: name.trim(), color, icon });
-        setToast({ message: "Categoria criada", variant: "success" });
+        showToast("Categoria criada", "success");
       }
       resetForm();
       setShowForm(false);
       load();
     } catch {
-      setToast({
-        message: editingId ? "Erro ao atualizar categoria" : "Erro ao criar categoria",
-        variant: "error",
-      });
+      showToast(editingId ? "Erro ao atualizar categoria" : "Erro ao criar categoria", "error");
     }
   };
 
@@ -80,7 +75,7 @@ export function Categories() {
     if (!deleteTarget) return;
     try {
       await categoryApi.delete(deleteTarget);
-      setToast({ message: "Categoria excluída", variant: "success" });
+      showToast("Categoria excluída", "success");
       setDeleteTarget(null);
       if (editingId === deleteTarget) {
         resetForm();
@@ -88,7 +83,7 @@ export function Categories() {
       }
       load();
     } catch {
-      setToast({ message: "Erro ao excluir categoria", variant: "error" });
+      showToast("Erro ao excluir categoria", "error");
     }
   };
 
@@ -202,7 +197,7 @@ export function Categories() {
       <div className="mt-6 space-y-2">
         {loading
           ? Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-14 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800" />
+              <Skeleton key={i} className="h-14 w-full rounded-xl" />
             ))
           : categories.length === 0
             ? (
@@ -250,12 +245,7 @@ export function Categories() {
         onCancel={() => setDeleteTarget(null)}
       />
 
-      <Toast
-        open={!!toast}
-        message={toast?.message ?? ""}
-        variant={toast?.variant ?? "success"}
-        onClose={() => setToast(null)}
-      />
+
     </section>
   );
 }

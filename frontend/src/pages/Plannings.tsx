@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Copy, Pencil, Plus, Trash2 } from "lucide-react";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { PlanningForm } from "@/components/PlanningForm";
-import { Toast } from "@/components/Toast";
+import { useToast } from "@/contexts/ToastContext";
 import { Card, CardTitle, CardValue } from "@/components/Card";
 import { SkeletonCard } from "@/components/Skeleton";
 import { planningApi } from "@/services/planning";
@@ -36,10 +36,7 @@ export function Plannings() {
     year: number;
   } | null>(null);
   const [copying, setCopying] = useState(false);
-  const [toast, setToast] = useState<{
-    message: string;
-    variant: "success" | "error";
-  } | null>(null);
+  const { toast: showToast } = useToast();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -47,7 +44,7 @@ export function Plannings() {
       const data = await planningApi.list();
       setPlans(data);
     } catch {
-      setToast({ message: "Erro ao carregar planejamentos", variant: "error" });
+      showToast("Erro ao carregar planejamentos", "error");
     } finally {
       setLoading(false);
     }
@@ -61,14 +58,11 @@ export function Plannings() {
     setSaving(true);
     try {
       await planningApi.create(data as PlanningCreate);
-      setToast({ message: "Planejamento criado com sucesso", variant: "success" });
+      showToast("Planejamento criado com sucesso", "success");
       setShowForm(false);
       load();
     } catch (err) {
-      setToast({
-        message: err instanceof Error ? err.message : "Erro ao criar",
-        variant: "error",
-      });
+      showToast(err instanceof Error ? err.message : "Erro ao criar", "error");
     } finally {
       setSaving(false);
     }
@@ -79,14 +73,11 @@ export function Plannings() {
     setSaving(true);
     try {
       await planningApi.update(editId, data as PlanningUpdate);
-      setToast({ message: "Planejamento atualizado", variant: "success" });
+      showToast("Planejamento atualizado", "success");
       setEditId(null);
       load();
     } catch (err) {
-      setToast({
-        message: err instanceof Error ? err.message : "Erro ao atualizar",
-        variant: "error",
-      });
+      showToast(err instanceof Error ? err.message : "Erro ao atualizar", "error");
     } finally {
       setSaving(false);
     }
@@ -95,10 +86,10 @@ export function Plannings() {
   const handleDelete = async (id: string) => {
     try {
       await planningApi.delete(id);
-      setToast({ message: "Planejamento excluído", variant: "success" });
+      showToast("Planejamento excluído", "success");
       load();
     } catch {
-      setToast({ message: "Erro ao excluir", variant: "error" });
+      showToast("Erro ao excluir", "error");
     }
   };
 
@@ -107,14 +98,11 @@ export function Plannings() {
     setCopying(true);
     try {
       await planningApi.copyFromPrevious(copyTarget.month, copyTarget.year);
-      setToast({ message: "Planejamento copiado com sucesso", variant: "success" });
+      showToast("Planejamento copiado com sucesso", "success");
       setCopyTarget(null);
       load();
     } catch (err) {
-      setToast({
-        message: err instanceof Error ? err.message : "Erro ao copiar",
-        variant: "error",
-      });
+      showToast(err instanceof Error ? err.message : "Erro ao copiar", "error");
     } finally {
       setCopying(false);
     }
@@ -219,7 +207,7 @@ export function Plannings() {
                           onClick={() =>
                             setCopyTarget({ month: next.month, year: next.year })
                           }
-                          className="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
                           aria-label="Copiar para próximo mês"
                         >
                           <Copy size={16} />
@@ -229,14 +217,14 @@ export function Plannings() {
                             setEditId(plan.id);
                             setShowForm(false);
                           }}
-                          className="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
                           aria-label="Editar"
                         >
                           <Pencil size={16} />
                         </button>
                         <button
                           onClick={() => handleDelete(plan.id)}
-                          className="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
                           aria-label="Excluir"
                         >
                           <Trash2 size={16} />
@@ -263,12 +251,7 @@ export function Plannings() {
         onCancel={() => setCopyTarget(null)}
       />
 
-      <Toast
-        open={!!toast}
-        message={toast?.message ?? ""}
-        variant={toast?.variant ?? "success"}
-        onClose={() => setToast(null)}
-      />
+
     </section>
   );
 }

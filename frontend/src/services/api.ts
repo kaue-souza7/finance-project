@@ -1,3 +1,5 @@
+import { getErrorMessage } from "@/utils/error";
+
 const BASE_URL = import.meta.env.VITE_API_URL ?? "/api/v1";
 
 function getToken(): string | null {
@@ -31,18 +33,14 @@ async function request<T>(
       signal: AbortSignal.timeout(30_000),
     });
   } catch (err) {
-    if (err instanceof DOMException && err.name === "TimeoutError") {
-      console.error("[api] timeout", method, path);
-      throw new Error("O servidor está demorando muito para responder. Tente novamente.");
-    }
-    console.error("[api] rede", method, path, err);
-    throw new Error("Erro de rede — backend offline ou inacessível");
+    console.error("[api] network", method, path, err);
+    throw new Error(getErrorMessage(err));
   }
 
   if (res.status === 401) {
     clearToken();
     window.location.href = "/login";
-    throw new Error("Sessão expirada");
+    throw new Error("Sessão expirada — faça login novamente");
   }
 
   if (res.status === 204) return undefined as T;
@@ -54,27 +52,18 @@ async function request<T>(
   }
 
   if (!res.ok) {
-    let message: string;
-    if (data && data.detail != null) {
-      if (typeof data.detail === "string") {
-        message = data.detail;
-      } else if (Array.isArray(data.detail)) {
-        message = (data.detail as Array<Record<string, unknown>>)
-          .map((e) => String(e.msg ?? ""))
-          .filter(Boolean)
-          .join("; ");
-      } else {
-        message = String(data.detail);
-      }
-    } else if (res.status >= 500) {
-      message = "Erro interno do servidor";
-    } else if (res.status === 0) {
-      message = "Erro de rede — backend offline";
-    } else {
-      message = `Falha na requisição (HTTP ${res.status})`;
+    const detail = data?.detail;
+    if (typeof detail === "string") {
+      throw new Error(detail);
     }
-    if (!message) message = `Falha na requisição (HTTP ${res.status})`;
-    throw new Error(message);
+    if (Array.isArray(detail)) {
+      const joined = (detail as Array<Record<string, unknown>>)
+        .map((e) => String(e.msg ?? ""))
+        .filter(Boolean)
+        .join("; ");
+      if (joined) throw new Error(joined);
+    }
+    throw new Error(`HTTP ${res.status}`);
   }
 
   return data as T;
