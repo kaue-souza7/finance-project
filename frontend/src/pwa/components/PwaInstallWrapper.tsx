@@ -18,7 +18,7 @@ export function PwaInstallWrapper() {
   const [showBiometricPrompt, setShowBiometricPrompt] = useState(false);
   const biometricChecked = useRef(false);
 
-  if (!biometricChecked.current && !isPWA) {
+  if (!biometricChecked.current) {
     biometricChecked.current = true;
     const alreadyRegistered = localStorage.getItem("webauthn_device");
     if (!alreadyRegistered) {
