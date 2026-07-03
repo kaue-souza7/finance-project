@@ -8,7 +8,7 @@ import {
   UserX,
 } from "lucide-react";
 import { Card } from "@/components/Card";
-import { Toast } from "@/components/Toast";
+import { useToast } from "@/contexts/ToastContext";
 import { leisureInviteApi } from "@/services/leisureInvite";
 import type {
   InviteResponse,
@@ -31,10 +31,7 @@ export function LeisureParticipantsPanel({
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
-  const [toast, setToast] = useState<{
-    message: string;
-    variant: "success" | "error";
-  } | null>(null);
+  const { toast } = useToast();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -70,7 +67,7 @@ export function LeisureParticipantsPanel({
     setSendError(null);
     try {
       await leisureInviteApi.sendInvite(leisureId, email.trim());
-      setToast({ message: "Convite enviado!", variant: "success" });
+      toast("Convite enviado!", "success");
       setEmail("");
       load();
     } catch (err) {
@@ -222,12 +219,7 @@ export function LeisureParticipantsPanel({
         </div>
       )}
 
-      <Toast
-        open={toast !== null}
-        message={toast?.message ?? ""}
-        variant={toast?.variant}
-        onClose={() => setToast(null)}
-      />
+
     </div>
   );
 }

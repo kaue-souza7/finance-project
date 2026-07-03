@@ -11,7 +11,7 @@ import {
   Users,
 } from "lucide-react";
 import { Card, CardTitle, CardValue } from "@/components/Card";
-import { Toast } from "@/components/Toast";
+import { useToast } from "@/contexts/ToastContext";
 import { leisureKmApi } from "@/services/leisureKm";
 import { parseBrl } from "@/utils/format";
 import type { LeisureKmResponse } from "@/types/finance";
@@ -29,10 +29,7 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [toast, setToast] = useState<{
-    message: string;
-    variant: "success" | "error";
-  } | null>(null);
+  const { toast } = useToast();
 
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
@@ -126,12 +123,9 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
         estimated_time: estimatedTime.trim() || null,
       });
       setKmData(data);
-      setToast({ message: "Cálculo salvo com sucesso!", variant: "success" });
+      toast("Cálculo salvo com sucesso!", "success");
     } catch (err) {
-      setToast({
-        message: err instanceof Error ? err.message : "Erro ao salvar",
-        variant: "error",
-      });
+      toast(err instanceof Error ? err.message : "Erro ao salvar", "error");
     } finally {
       setSaving(false);
     }
@@ -149,12 +143,9 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
       setConsumption("");
       setTolls("");
       setEstimatedTime("");
-      setToast({ message: "Cálculo removido", variant: "success" });
+      toast("Cálculo removido", "success");
     } catch (err) {
-      setToast({
-        message: err instanceof Error ? err.message : "Erro ao remover",
-        variant: "error",
-      });
+      toast(err instanceof Error ? err.message : "Erro ao remover", "error");
     } finally {
       setDeleting(false);
     }
@@ -448,12 +439,7 @@ export function KmCalculator({ leisureId }: KmCalculatorProps) {
         </div>
       </div>
 
-      <Toast
-        open={toast !== null}
-        message={toast?.message ?? ""}
-        variant={toast?.variant}
-        onClose={() => setToast(null)}
-      />
+
     </div>
   );
 }

@@ -22,7 +22,7 @@ import { LeisureMap } from "@/components/LeisureMap";
 import { LeisureParticipantsPanel } from "@/components/LeisureParticipantsPanel";
 import { KmCalculator } from "@/components/KmCalculator";
 import { Skeleton, SkeletonCard } from "@/components/Skeleton";
-import { Toast } from "@/components/Toast";
+
 import { leisureApi } from "@/services/leisure";
 import { leisureExpenseApi } from "@/services/leisureExpense";
 import { useAuth } from "@/contexts/AuthContext";
@@ -99,10 +99,7 @@ export function LeisureDetail() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deletingEvent, setDeletingEvent] = useState(false);
-  const [toast, setToast] = useState<{
-    message: string;
-    variant: "success" | "error";
-  } | null>(null);
+
 
   const loadExpenses = useCallback(async () => {
     if (!id) return;
@@ -143,7 +140,7 @@ export function LeisureDetail() {
           prev.map((e) => (e.id === updated.id ? updated : e)),
         );
       } catch {
-        setToast({ message: "Erro ao atualizar despesa", variant: "error" });
+        showToast("Erro ao atualizar despesa", "error");
       }
     },
     [id],
@@ -156,7 +153,7 @@ export function LeisureDetail() {
         await leisureExpenseApi.delete(id!, expenseId);
         setExpenses((prev) => prev.filter((e) => e.id !== expenseId));
       } catch {
-        setToast({ message: "Erro ao excluir despesa", variant: "error" });
+        showToast("Erro ao excluir despesa", "error");
       } finally {
         setDeletingId(null);
       }
@@ -714,12 +711,7 @@ export function LeisureDetail() {
         </div>
       )}
 
-      <Toast
-        open={toast !== null}
-        message={toast?.message ?? ""}
-        variant={toast?.variant}
-        onClose={() => setToast(null)}
-      />
+
     </section>
   );
 }

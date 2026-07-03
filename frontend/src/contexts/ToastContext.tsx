@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { CheckCircle, X, XCircle } from "lucide-react";
 
 type ToastVariant = "success" | "error";
@@ -13,6 +13,7 @@ interface ToastContextValue {
   toast: (message: string, variant?: ToastVariant) => void;
 }
 
+const AUTO_DISMISS_MS = 4000;
 const ToastContext = createContext<ToastContextValue | null>(null);
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
@@ -21,14 +22,21 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     message: "",
     variant: "success",
   });
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const close = useCallback(() => {
+    setState((prev) => ({ ...prev, open: false }));
+  }, []);
 
   const toast = useCallback((message: string, variant: ToastVariant = "success") => {
     setState({ open: true, message, variant });
   }, []);
 
-  const close = useCallback(() => {
-    setState((prev) => ({ ...prev, open: false }));
-  }, []);
+  useEffect(() => {
+    if (!state.open) return;
+    timerRef.current = setTimeout(close, AUTO_DISMISS_MS);
+    return () => clearTimeout(timerRef.current);
+  }, [state.open, close]);
 
   const Icon = state.variant === "success" ? CheckCircle : XCircle;
 
@@ -37,7 +45,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       {children}
 
       {state.open && (
-        <div className="fixed bottom-4 left-4 right-4 z-50 sm:left-auto sm:right-4 sm:w-auto">
+        <div className="fixed left-4 right-4 z-50 sm:left-auto sm:right-4 sm:w-auto bottom-[calc(1rem+env(safe-area-inset-bottom,0px))]">
           <div
             className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-white shadow-lg animate-toast ${
               state.variant === "success"

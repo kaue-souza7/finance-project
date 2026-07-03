@@ -5,18 +5,23 @@ import App from "./App";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { PreferencesProvider } from "@/contexts/PreferencesContext";
 import { ToastProvider } from "@/contexts/ToastContext";
+import { AppInitProvider } from "@/pwa/context/AppInitContext";
+import { ReadySignal } from "@/pwa/components/ReadySignal";
 import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <PreferencesProvider>
-          <ToastProvider>
-            <App />
-          </ToastProvider>
-        </PreferencesProvider>
-      </AuthProvider>
-    </BrowserRouter>
+    <AppInitProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <ReadySignal />
+          <PreferencesProvider>
+            <ToastProvider>
+              <App />
+            </ToastProvider>
+          </PreferencesProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </AppInitProvider>
   </StrictMode>,
 );

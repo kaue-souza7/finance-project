@@ -10,7 +10,7 @@ import {
 import { Avatar } from "@/components/Avatar";
 import { Card } from "@/components/Card";
 import { Skeleton, SkeletonCard } from "@/components/Skeleton";
-import { Toast } from "@/components/Toast";
+import { useToast } from "@/contexts/ToastContext";
 import { InviteModal } from "@/components/InviteModal";
 import { InviteBottomSheet } from "@/components/InviteBottomSheet";
 import { useChats } from "@/hooks/useChats";
@@ -29,22 +29,16 @@ export function Chat() {
   const [inviteOpen, setInviteOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [acting, setActing] = useState<string | null>(null);
-  const [toast, setToast] = useState<{
-    message: string;
-    variant: "success" | "error";
-  } | null>(null);
+  const { toast: showToast } = useToast();
 
   const handleAccept = useCallback(async (id: string) => {
     setActing(id);
     try {
       await accept(id);
-      setToast({ message: "Convite aceito!", variant: "success" });
+      showToast("Convite aceito!", "success");
       reload();
     } catch (e) {
-      setToast({
-        message: e instanceof Error ? e.message : "Erro ao aceitar convite",
-        variant: "error",
-      });
+      showToast(e instanceof Error ? e.message : "Erro ao aceitar convite", "error");
     } finally {
       setActing(null);
     }
@@ -54,12 +48,9 @@ export function Chat() {
     setActing(id);
     try {
       await decline(id);
-      setToast({ message: "Convite recusado", variant: "success" });
+      showToast("Convite recusado", "success");
     } catch (e) {
-      setToast({
-        message: e instanceof Error ? e.message : "Erro ao recusar convite",
-        variant: "error",
-      });
+      showToast(e instanceof Error ? e.message : "Erro ao recusar convite", "error");
     } finally {
       setActing(null);
     }
@@ -227,12 +218,7 @@ export function Chat() {
         onDecline={handleDecline}
       />
 
-      <Toast
-        open={toast !== null}
-        message={toast?.message ?? ""}
-        variant={toast?.variant}
-        onClose={() => setToast(null)}
-      />
+
     </section>
   );
 }

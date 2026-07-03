@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { AlertTriangle, Loader2, X } from "lucide-react";
 
 interface ConfirmDialogProps {
@@ -17,11 +18,35 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape" && !loading) onCancel();
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    panelRef.current?.focus();
+
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open, loading, onCancel]);
+
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
-      <div className="w-full rounded-t-2xl border border-slate-200 bg-white p-6 shadow-xl sm:max-w-sm sm:rounded-xl dark:border-slate-700 dark:bg-slate-800">
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+    >
+      <div
+        ref={panelRef}
+        tabIndex={-1}
+        className="w-full rounded-t-2xl border border-slate-200 bg-white p-6 shadow-xl outline-none sm:max-w-sm sm:rounded-xl dark:border-slate-700 dark:bg-slate-800"
+      >
         <div className="mb-4 flex items-start justify-between">
           <div className="flex items-center gap-3">
             <div className="rounded-full bg-amber-100 p-2 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400">
@@ -33,6 +58,7 @@ export function ConfirmDialog({
           </div>
           <button
             onClick={onCancel}
+            aria-label="Fechar"
             className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700"
           >
             <X size={18} />

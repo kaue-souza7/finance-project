@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { messageApi } from "@/services/message";
 import type { MessageResponse } from "@/types/finance";
 
+const POLL_INTERVAL_MS = 3000;
+
 export function useMessages(chatId: string | undefined) {
   const [messages, setMessages] = useState<MessageResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -66,8 +68,32 @@ export function useMessages(chatId: string | undefined) {
   }, [loadInitial]);
 
   useEffect(() => {
-    const id = setInterval(poll, 3000);
-    return () => clearInterval(id);
+    let id: ReturnType<typeof setInterval>;
+
+    function startPolling() {
+      id = setInterval(poll, POLL_INTERVAL_MS);
+    }
+
+    function stopPolling() {
+      if (id) clearInterval(id);
+    }
+
+    function onVisibilityChange() {
+      if (document.hidden) {
+        stopPolling();
+      } else {
+        poll();
+        startPolling();
+      }
+    }
+
+    startPolling();
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    return () => {
+      stopPolling();
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
   }, [poll]);
 
   return { messages, loading, sending, error, send, reload: loadInitial };

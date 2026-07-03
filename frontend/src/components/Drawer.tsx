@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
   CalendarCheck,
@@ -34,14 +34,22 @@ interface DrawerProps {
 export function Drawer({ open, onClose }: DrawerProps) {
   const { user } = useAuth();
 
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === "Escape") onClose();
+  }, [onClose]);
+
   useEffect(() => {
     if (open) {
       document.documentElement.classList.add("no-scroll");
+      document.addEventListener("keydown", handleKeyDown);
     } else {
       document.documentElement.classList.remove("no-scroll");
     }
-    return () => document.documentElement.classList.remove("no-scroll");
-  }, [open]);
+    return () => {
+      document.documentElement.classList.remove("no-scroll");
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open, handleKeyDown]);
 
   return (
     <>
@@ -54,7 +62,7 @@ export function Drawer({ open, onClose }: DrawerProps) {
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-slate-200 bg-sidebar shadow-xl transition-transform duration-300 ease-out dark:border-slate-700 dark:bg-sidebar-dark lg:static lg:shadow-none lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-slate-200 bg-sidebar shadow-xl transition-transform duration-300 ease-out safe-area-inset-top safe-area-inset-bottom dark:border-slate-700 dark:bg-sidebar-dark lg:static lg:shadow-none lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >

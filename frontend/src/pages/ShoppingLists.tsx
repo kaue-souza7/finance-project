@@ -6,7 +6,7 @@ import { ReceivedShoppingListInvitesModal } from "@/components/ReceivedShoppingL
 import { ShoppingListCard } from "@/components/ShoppingListCard";
 import { ShoppingListForm } from "@/components/ShoppingListForm";
 import { SkeletonCard } from "@/components/Skeleton";
-import { Toast } from "@/components/Toast";
+import { useToast } from "@/contexts/ToastContext";
 import { shoppingListApi } from "@/services/shoppingList";
 import type { ShoppingListResponse } from "@/types/finance";
 
@@ -23,10 +23,7 @@ export function ShoppingLists() {
   );
   const [deleting, setDeleting] = useState(false);
   const [showInvites, setShowInvites] = useState(false);
-  const [toast, setToast] = useState<{
-    message: string;
-    variant: "success" | "error";
-  } | null>(null);
+  const { toast: showToast } = useToast();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -35,7 +32,7 @@ export function ShoppingLists() {
       setLists(data);
     } catch (err) {
       console.error("Erro ao carregar listas:", err);
-      setToast({ message: "Erro ao carregar listas", variant: "error" });
+      showToast("Erro ao carregar listas", "error");
     } finally {
       setLoading(false);
     }
@@ -50,12 +47,12 @@ export function ShoppingLists() {
     setDeleting(true);
     try {
       await shoppingListApi.delete(deleteTarget.id);
-      setToast({ message: "Lista excluída", variant: "success" });
+      showToast("Lista excluída", "success");
       setDeleteTarget(null);
       load();
     } catch (err) {
       console.error("Erro ao excluir lista:", err);
-      setToast({ message: "Erro ao excluir lista", variant: "error" });
+      showToast("Erro ao excluir lista", "error");
     } finally {
       setDeleting(false);
     }
@@ -68,7 +65,7 @@ export function ShoppingLists() {
 
   const handleFormSuccess = () => {
     const message = editTarget ? "Lista atualizada" : "Lista criada";
-    setToast({ message, variant: "success" });
+    showToast(message, "success");
     reloadSilent();
   };
 
@@ -235,12 +232,7 @@ export function ShoppingLists() {
         onUpdate={load}
       />
 
-      <Toast
-        open={!!toast}
-        message={toast?.message ?? ""}
-        variant={toast?.variant ?? "success"}
-        onClose={() => setToast(null)}
-      />
+
     </section>
   );
 }
