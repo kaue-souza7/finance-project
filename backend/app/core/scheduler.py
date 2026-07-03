@@ -41,6 +41,31 @@ def init_scheduler():
         id="chat_cleanup_daily",
         replace_existing=True,
     )
+
+    def cleanup_expired_challenges():
+        db = SessionLocal()
+        try:
+            from app.repositories.webauthn_repository import (
+                WebAuthnChallengeRepository,
+            )
+            repo = WebAuthnChallengeRepository()
+            count = repo.delete_expired(db)
+            if count > 0:
+                logger.info("Cleanup: %d challenges expirados removidos", count)
+        except Exception:
+            logger.exception("Erro ao limpar challenges expirados")
+        finally:
+            db.close()
+
+    _scheduler.add_job(
+        cleanup_expired_challenges,
+        trigger="cron",
+        hour=3,
+        minute=30,
+        id="webauthn_challenge_cleanup_daily",
+        replace_existing=True,
+    )
+
     _scheduler.start()
 
     logger.info("Scheduler de limpeza iniciado (diário às 03:00 UTC)")

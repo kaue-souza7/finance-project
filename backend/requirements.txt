@@ -6,7 +6,7 @@ bcrypt==5.0.0
 cffi==2.0.0
 click==8.4.1
 cloudinary==1.44.2
-cryptography==48.0.0
+cryptography>=49.0.0
 dnspython==2.8.0
 ecdsa==0.19.2
 email-validator==2.3.0
@@ -38,6 +38,7 @@ starlette==0.41.3
 typing-inspection==0.4.2
 typing_extensions==4.15.0
 uvicorn==0.34.0
+webauthn>=3.0.0
 uvloop==0.22.1
 watchfiles==1.2.0
 websockets==16.0
