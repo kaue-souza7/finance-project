@@ -20,7 +20,9 @@ def _alembic_config() -> Config:
     config = Config(str(BACKEND_DIR / "alembic.ini"))
     config.set_main_option("script_location", str(BACKEND_DIR / "alembic"))
     config.set_main_option("prepend_sys_path", str(BACKEND_DIR))
-    config.set_main_option("sqlalchemy.url", settings.migration_database_url)
+    config.set_main_option(
+        "sqlalchemy.url", settings.migration_database_url.replace("%", "%%")
+    )
     return config
 
 

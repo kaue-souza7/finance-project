@@ -12,7 +12,9 @@ from app.core.config import settings  # noqa: E402
 from app.database.session import Base  # noqa: E402
 
 config = context.config
-config.set_main_option("sqlalchemy.url", settings.migration_database_url)
+config.set_main_option(
+    "sqlalchemy.url", settings.migration_database_url.replace("%", "%%")
+)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
