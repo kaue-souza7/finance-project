@@ -1,5 +1,7 @@
 # Finance Project
 
+![CI](https://github.com/kaue-souza7/finance-project/actions/workflows/ci.yml/badge.svg)
+
 Sistema web mobile-first (PWA) de planejamento financeiro mensal.
 
 ## Stack
