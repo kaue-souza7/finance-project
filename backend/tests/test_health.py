@@ -30,3 +30,14 @@ def test_liveness_does_not_require_database(client: TestClient):
     response = client.get("/health/live")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
+
+
+def test_diagnostics_do_not_expose_pii(client: TestClient, owner):
+    response = client.get("/health/diagnostics")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "ok"
+    assert data["database"] == "ok"
+    assert data["has_users"] is True
+    assert "email" not in data
+    assert "user_id" not in data

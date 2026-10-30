@@ -38,3 +38,29 @@ def readiness_check(db: Session = Depends(get_db)):
 def liveness_check():
     """Liveness: verifica apenas se o processo HTTP está de pé."""
     return {"status": "ok"}
+
+
+@router.get("/health/diagnostics")
+def diagnostics(db: Session = Depends(get_db)):
+    """Diagnóstico seguro: sem PII, sem credenciais e sem tokens."""
+    _check_database(db)
+    revision = None
+    has_users = False
+    try:
+        revision = db.execute(
+            text("SELECT version_num FROM alembic_version LIMIT 1")
+        ).scalar()
+    except Exception:
+        logger.warning("Diagnóstico: alembic_version indisponível")
+    try:
+        has_users = bool(
+            db.execute(text("SELECT EXISTS(SELECT 1 FROM users)")).scalar()
+        )
+    except Exception:
+        logger.warning("Diagnóstico: tabela users indisponível")
+    return {
+        "status": "ok",
+        "database": "ok",
+        "alembic_revision": revision,
+        "has_users": has_users,
+    }
