@@ -13,6 +13,18 @@ Use apenas placeholders. O arquivo `.env` é ignorado pelo Git.
 4. Revise logs de uso do provedor em busca de atividade suspeita.
 5. Ative secret scanning e push protection no GitHub.
 
+#### Cloudinary
+
+O `api_secret` antigo deve ser considerado comprometido mesmo após a limpeza
+do histórico. No Console da Cloudinary:
+
+1. Acesse **Settings → Security → API Keys**.
+2. Gere um novo par de API key/secret.
+3. Atualize `CLOUDINARY_API_KEY` e `CLOUDINARY_API_SECRET` no ambiente de produção
+   e no `.env` local.
+4. Delete a chave antiga.
+5. Confira o uso recente em **Settings → Usage** e os logs de upload.
+
 Exemplo de limpeza de histórico com `git filter-repo`:
 
 ```bash
