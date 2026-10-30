@@ -18,6 +18,15 @@ def list_categories(
     return service.list_by_user(str(current_user.id))
 
 
+@router.post("/defaults", response_model=list[CategoryResponse])
+def seed_default_categories(
+    current_user: UserResponse = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    service = CategoryService(db)
+    return service.seed_defaults(str(current_user.id))
+
+
 @router.post("/", response_model=CategoryResponse, status_code=201)
 def create_category(
     data: CategoryCreate,

@@ -51,7 +51,7 @@ export function UserDropdown() {
     {
       label: "Sair",
       icon: LogOut,
-      action: () => { close(); logout(); },
+      action: () => { close(); void logout(); },
       danger: true,
     },
   ];

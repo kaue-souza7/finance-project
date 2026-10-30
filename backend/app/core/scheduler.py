@@ -66,6 +66,39 @@ def init_scheduler():
         replace_existing=True,
     )
 
+    def cleanup_expired_auth_tokens():
+        db = SessionLocal()
+        try:
+            from app.repositories.password_reset_token_repository import (
+                PasswordResetTokenRepository,
+            )
+            from app.repositories.refresh_token_repository import (
+                RefreshTokenRepository,
+            )
+            refresh_count = RefreshTokenRepository.delete_expired(db)
+            reset_count = PasswordResetTokenRepository.delete_expired(db)
+            db.commit()
+            if refresh_count or reset_count:
+                logger.info(
+                    "Cleanup: %d refresh tokens e %d reset tokens expirados removidos",
+                    refresh_count,
+                    reset_count,
+                )
+        except Exception:
+            db.rollback()
+            logger.exception("Erro ao limpar tokens de autenticação expirados")
+        finally:
+            db.close()
+
+    _scheduler.add_job(
+        cleanup_expired_auth_tokens,
+        trigger="cron",
+        hour=3,
+        minute=45,
+        id="auth_token_cleanup_daily",
+        replace_existing=True,
+    )
+
     _scheduler.start()
 
     logger.info("Scheduler de limpeza iniciado (diário às 03:00 UTC)")

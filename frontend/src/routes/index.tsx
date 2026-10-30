@@ -24,6 +24,9 @@ const Chat = lazy(() => import("@/pages/Chat").then((m) => ({ default: m.Chat })
 const ChatDetail = lazy(() => import("@/pages/ChatDetail").then((m) => ({ default: m.ChatDetail })));
 const ShoppingLists = lazy(() => import("@/pages/ShoppingLists").then((m) => ({ default: m.ShoppingLists })));
 const ShoppingListDetail = lazy(() => import("@/pages/ShoppingListDetail").then((m) => ({ default: m.ShoppingListDetail })));
+const Onboarding = lazy(() => import("@/pages/Onboarding").then((m) => ({ default: m.Onboarding })));
+const ForgotPassword = lazy(() => import("@/pages/ForgotPassword").then((m) => ({ default: m.ForgotPassword })));
+const ResetPassword = lazy(() => import("@/pages/ResetPassword").then((m) => ({ default: m.ResetPassword })));
 
 export const routes: RouteObject[] = [
   {
@@ -57,9 +60,12 @@ export const routes: RouteObject[] = [
       { path: "chat/:id", element: <ChatDetail /> },
       { path: "checklist", element: <ShoppingLists /> },
       { path: "checklist/:id", element: <ShoppingListDetail /> },
+      { path: "onboarding", element: <Onboarding /> },
     ],
   },
   { path: "login", element: <Login /> },
   { path: "register", element: <Register /> },
+  { path: "forgot-password", element: <ForgotPassword /> },
+  { path: "reset-password", element: <ResetPassword /> },
   { path: "*", element: <Navigate to="/" replace /> },
 ];

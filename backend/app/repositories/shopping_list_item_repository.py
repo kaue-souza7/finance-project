@@ -77,7 +77,7 @@ class ShoppingListItemRepository:
             db.query(ShoppingListItem)
             .filter(
                 ShoppingListItem.shopping_list_id == shopping_list_id,
-                ShoppingListItem.checked == True,
+                ShoppingListItem.checked.is_(True),
             )
             .count()
         )

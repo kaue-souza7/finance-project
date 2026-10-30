@@ -82,6 +82,12 @@ class User(Base):
     webauthn_credentials = relationship(
         "WebAuthnCredential", back_populates="user", cascade="all, delete-orphan"
     )
+    refresh_tokens = relationship(
+        "RefreshToken", back_populates="user", cascade="all, delete-orphan"
+    )
+    password_reset_tokens = relationship(
+        "PasswordResetToken", back_populates="user", cascade="all, delete-orphan"
+    )
 
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

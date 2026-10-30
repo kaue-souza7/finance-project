@@ -5,14 +5,14 @@ from datetime import datetime
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-logger = logging.getLogger(__name__)
-
 from app.repositories.chat_participant_repository import (
     ChatParticipantRepository,
 )
 from app.repositories.chat_repository import ChatRepository
 from app.repositories.message_repository import MessageRepository
 from app.schemas.message import MessagePageResponse, MessageResponse
+
+logger = logging.getLogger(__name__)
 
 
 class MessageService:

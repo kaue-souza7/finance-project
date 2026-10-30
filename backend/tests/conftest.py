@@ -1,18 +1,25 @@
+import os
 import uuid
 from datetime import datetime, timezone
+
+os.environ["RATE_LIMIT_ENABLED"] = "false"
 
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from sqlalchemy import String, TypeDecorator, create_engine
+from sqlalchemy import create_engine
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker
 
 from app.core.security import create_access_token, hash_password
 from app.database.session import Base
 from app.main import create_app
-from app.models import (  # noqa: ensure all models are registered
-    ShoppingListInvite, ShoppingListShare, User,
+from app.models import (  # noqa: F401
+    PasswordResetToken,
+    RefreshToken,
+    ShoppingListInvite,
+    ShoppingListShare,
+    User,
 )
 
 # ── Make PostgreSQL UUID type work with SQLite ──────────────────────────

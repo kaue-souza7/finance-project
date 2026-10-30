@@ -5,6 +5,7 @@ from app.core.security import hash_password, verify_password
 from app.repositories.user_repository import UserRepository
 from app.schemas.auth import UserResponse
 from app.schemas.profile import AvatarResponse, PasswordChange, ProfileUpdate
+from app.services.token_service import TokenService
 from app.services.upload_service import UploadService
 from app.utils.file_validator import validate_image
 
@@ -67,9 +68,9 @@ class ProfileService:
                 detail="New password must be different from current password",
             )
 
-        self.repo.update(
-            self.db, user.id, hashed_password=hash_password(data.new_password)
-        )
+        user.hashed_password = hash_password(data.new_password)
+        TokenService(self.db).revoke_all_for_user(user.id)
+        self.db.commit()
 
     def upload_avatar(self, user_id: str, file: UploadFile) -> AvatarResponse:
         user = self.repo.get_by_id(self.db, user_id)

@@ -1,9 +1,21 @@
+import hashlib
+import secrets
 from datetime import datetime, timedelta, timezone
 
 import bcrypt
 from jose import JWTError, jwt
 
 from app.core.config import settings
+
+
+def generate_opaque_token() -> str:
+    """Gera um token opaco de alta entropia para refresh/reset."""
+    return secrets.token_urlsafe(48)
+
+
+def hash_opaque_token(token: str) -> str:
+    """Tokens opacos são aleatórios; SHA-256 é suficiente e rápido."""
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
 
 
 def verify_password(plain: str, hashed: str) -> bool:

@@ -36,6 +36,12 @@ Thumbs.db
 *.log
 logs/
 
+# Tests / lint
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
 # Alembic
 backend/alembic/versions/*.pyc
 

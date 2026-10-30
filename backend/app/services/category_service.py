@@ -22,6 +22,17 @@ class CategoryService:
         cat = self.repo.create(self.db, uid, data)
         return CategoryResponse.model_validate(cat)
 
+    def seed_defaults(self, user_id: str) -> list[CategoryResponse]:
+        uid = uuid.UUID(user_id)
+        created = self.repo.seed_defaults(self.db, uid)
+        self.db.commit()
+        if created:
+            return [CategoryResponse.model_validate(c) for c in created]
+        return [
+            CategoryResponse.model_validate(c)
+            for c in self.repo.list_by_user(self.db, uid)
+        ]
+
     def update(
         self, category_id: str, user_id: str, data: CategoryUpdate
     ) -> CategoryResponse:

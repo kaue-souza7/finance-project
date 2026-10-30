@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { api } from "@/services/api";
+import type { TokenResponse } from "@/types/finance";
 import { base64UrlToArrayBuffer, isPlatformAuthenticatorAvailable, isWebAuthnSupported } from "../utils/webauthn";
 import type { WebAuthnCredentialInfo, WebAuthnRegisterOptions } from "../types/webauthn";
 
@@ -8,7 +9,7 @@ interface UseWebAuthnReturn {
   checking: boolean;
   checkAvailability: () => Promise<boolean>;
   register: () => Promise<string | null>;
-  authenticate: () => Promise<string | null>;
+  authenticate: () => Promise<TokenResponse | null>;
   listCredentials: () => Promise<WebAuthnCredentialInfo[]>;
   removeCredential: (credentialId: string) => Promise<void>;
 }
@@ -78,7 +79,7 @@ export function useWebAuthn(): UseWebAuthnReturn {
     return null;
   }, []);
 
-  const authenticate = useCallback(async (): Promise<string | null> => {
+  const authenticate = useCallback(async (): Promise<TokenResponse | null> => {
     if (!isWebAuthnSupported()) {
       throw new Error("Biometria não suportada neste navegador");
     }
@@ -111,12 +112,12 @@ export function useWebAuthn(): UseWebAuthnReturn {
       },
     };
 
-    const authResult = await api.post<{ access_token: string }>(
+    const authResult = await api.post<TokenResponse>(
       "/auth/webauthn/login/complete",
       { ...rawResult, challenge: options.challenge },
     );
 
-    return authResult.access_token;
+    return authResult;
   }, []);
 
   const listCredentials = useCallback(async (): Promise<WebAuthnCredentialInfo[]> => {

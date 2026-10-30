@@ -37,8 +37,12 @@ export function Register() {
       setError("Preencha todos os campos.");
       return;
     }
-    if (password.length < 6) {
-      setError("A senha deve ter no mínimo 6 caracteres.");
+    if (password.length < 8) {
+      setError("A senha deve ter no mínimo 8 caracteres.");
+      return;
+    }
+    if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
+      setError("A senha deve ter maiúscula, minúscula e número.");
       return;
     }
     if (password !== confirm) {
@@ -49,7 +53,7 @@ export function Register() {
     setError(null);
     try {
       await register({ name: name.trim(), email: email.trim(), password });
-      navigate("/", { replace: true });
+      navigate("/onboarding", { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao cadastrar");
     } finally {
@@ -152,10 +156,10 @@ export function Register() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Mínimo 6 caracteres"
+                placeholder="Mínimo 8 caracteres, com maiúscula, minúscula e número"
                 autoComplete="new-password"
                 required
-                minLength={6}
+                minLength={8}
                 className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white/50 px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-all duration-200 focus:border-indigo-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800/50 dark:text-white dark:placeholder-slate-500 dark:focus:border-indigo-500 dark:focus:bg-slate-800 dark:focus:ring-indigo-400/20"
               />
             </div>

@@ -4,8 +4,6 @@ import uuid
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-logger = logging.getLogger(__name__)
-
 from app.repositories.chat_invite_repository import ChatInviteRepository
 from app.repositories.chat_participant_repository import (
     ChatParticipantRepository,
@@ -13,6 +11,8 @@ from app.repositories.chat_participant_repository import (
 from app.repositories.chat_repository import ChatRepository
 from app.repositories.user_repository import UserRepository
 from app.schemas.chat_invite import InviteResponse
+
+logger = logging.getLogger(__name__)
 
 
 class ChatInviteService:

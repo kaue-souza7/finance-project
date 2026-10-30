@@ -3,13 +3,14 @@ import logging
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 from app.core.cloudinary import configure_cloudinary
 from app.core.config import settings
+from app.core.rate_limit import limiter
 
 from app.api.v1.auth import router as auth_router
-
-logger = logging.getLogger(__name__)
 from app.api.v1.health import router as health_router
 from app.api.v1.categories import router as categories_router
 from app.api.v1.expenses import router as expenses_router
@@ -34,9 +35,13 @@ from app.api.v1.users import router as users_router
 from app.api.v1.quotes import router as quotes_router
 from app.api.v1.webauthn import router as webauthn_router
 
+logger = logging.getLogger(__name__)
+
 
 def create_app() -> FastAPI:
     app = FastAPI(title="Finance Project API", version="0.1.0")
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
     logging.basicConfig(level=logging.INFO)
     logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)

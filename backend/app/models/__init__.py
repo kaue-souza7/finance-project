@@ -15,6 +15,8 @@ from app.models.shopping_list import ShoppingList
 from app.models.shopping_list_item import ShoppingListItem
 from app.models.shopping_list_invite import ShoppingListInvite
 from app.models.shopping_list_share import ShoppingListShare
+from app.models.refresh_token import RefreshToken
+from app.models.password_reset_token import PasswordResetToken
 
 __all__ = [
     "User",
@@ -34,4 +36,6 @@ __all__ = [
     "ShoppingListItem",
     "ShoppingListInvite",
     "ShoppingListShare",
+    "RefreshToken",
+    "PasswordResetToken",
 ]

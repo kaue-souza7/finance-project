@@ -1,5 +1,4 @@
 import uuid
-from datetime import datetime, timezone
 
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
@@ -12,8 +11,6 @@ from webauthn import (
 )
 from webauthn.helpers.structs import (
     AuthenticatorSelectionCriteria,
-    RegistrationCredential,
-    AuthenticationCredential,
     ResidentKeyRequirement,
     UserVerificationRequirement,
 )
@@ -21,8 +18,8 @@ from webauthn.helpers.exceptions import InvalidRegistrationResponse, InvalidAuth
 from webauthn.helpers import base64url_to_bytes, bytes_to_base64url
 
 from app.core.config import settings
-from app.core.security import create_access_token
 from app.repositories.user_repository import UserRepository
+from app.services.token_service import TokenService
 from app.repositories.webauthn_repository import (
     WebAuthnChallengeRepository,
     WebAuthnCredentialRepository,
@@ -170,7 +167,12 @@ class WebAuthnService:
             "rpId": self.rp_id,
         }
 
-    def verify_authentication(self, data: dict) -> dict:
+    def verify_authentication(
+        self,
+        data: dict,
+        user_agent: str | None = None,
+        ip_address: str | None = None,
+    ) -> dict:
         raw_challenge = data.get("challenge", "")
         if not raw_challenge or len(raw_challenge) < MIN_CHALLENGE_LENGTH:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid challenge")
@@ -216,11 +218,15 @@ class WebAuthnService:
         if not credential_record.user:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
-        token = create_access_token(data={"sub": str(credential_record.user.id)})
+        pair = TokenService(self.db).issue(
+            credential_record.user.id, user_agent, ip_address
+        )
 
         return {
-            "access_token": token,
+            "access_token": pair.access_token,
+            "refresh_token": pair.refresh_token,
             "token_type": "bearer",
+            "expires_in": pair.expires_in,
             "auth_method": "webauthn",
         }
 

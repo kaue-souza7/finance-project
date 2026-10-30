@@ -11,9 +11,6 @@ export function usePWAUpdate(): UsePWAUpdateReturn {
     needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW({
-    onRegisteredSW(_swUrl: string, _registration: ServiceWorkerRegistration | undefined) {
-      // SW registered — noop for now, reserved for future telemetry
-    },
     onRegisterError(error: unknown) {
       console.warn("SW registration failed", error);
     },

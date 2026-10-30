@@ -413,9 +413,9 @@ class TestShares:
             headers=other_headers,
         )
         assert resp.status_code == 200
-        titles = [l["title"] for l in resp.json()]
+        titles = [item["title"] for item in resp.json()]
         assert "Lista Compartilhada" in titles
-        roles = [l["role"] for l in resp.json()]
+        roles = [item["role"] for item in resp.json()]
         assert "editor" in roles or "viewer" in roles
 
 

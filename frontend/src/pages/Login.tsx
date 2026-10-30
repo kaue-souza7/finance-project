@@ -1,5 +1,5 @@
 import { type FormEvent, useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import logoSrc from "@/assets/logo/finance-logo.png";
@@ -8,6 +8,12 @@ import { WebAuthnLoginButton } from "@/webauthn/components/WebAuthnLoginButton";
 export function Login() {
   const { login, webauthnLogin, isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const returnToParam = searchParams.get("returnTo");
+  const returnTo =
+    returnToParam && returnToParam.startsWith("/") && !returnToParam.startsWith("//")
+      ? returnToParam
+      : "/";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +46,7 @@ export function Login() {
     setError(null);
     try {
       await login({ email: email.trim(), password });
-      navigate("/", { replace: true });
+      navigate(returnTo, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao entrar");
     } finally {
@@ -86,10 +92,10 @@ export function Login() {
           {/* Biometric login */}
           <div className="mb-5">
             <WebAuthnLoginButton
-              onToken={async (token) => {
+              onTokens={async (tokens) => {
                 try {
-                  await webauthnLogin(token);
-                  navigate("/", { replace: true });
+                  await webauthnLogin(tokens);
+                  navigate(returnTo, { replace: true });
                 } catch {
                   setError("Erro ao fazer login com biometria");
                 }
@@ -153,6 +159,15 @@ export function Login() {
                 required
                 className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white/50 px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition-all duration-200 focus:border-indigo-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-600 dark:bg-slate-800/50 dark:text-white dark:placeholder-slate-500 dark:focus:border-indigo-500 dark:focus:bg-slate-800 dark:focus:ring-indigo-400/20"
               />
+            </div>
+
+            <div className="flex justify-end">
+              <Link
+                to="/forgot-password"
+                className="text-xs font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+              >
+                Esqueci minha senha
+              </Link>
             </div>
 
             <button

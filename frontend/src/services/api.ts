@@ -1,25 +1,73 @@
 import { getErrorMessage } from "@/utils/error";
+import {
+  clearTokens,
+  getAccessToken,
+  getRefreshToken,
+  setTokens,
+} from "./tokenStorage";
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? "/api/v1";
 
-function getToken(): string | null {
-  return localStorage.getItem("access_token");
+type TokenResponse = {
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  expires_in: number;
+};
+
+let refreshPromise: Promise<boolean> | null = null;
+
+function redirectToLogin(): void {
+  const returnTo = `${window.location.pathname}${window.location.search}`;
+  const suffix =
+    returnTo && returnTo !== "/login"
+      ? `?returnTo=${encodeURIComponent(returnTo)}`
+      : "";
+  window.location.href = `/login${suffix}`;
 }
 
-function clearToken() {
-  localStorage.removeItem("access_token");
+async function refreshAccessToken(): Promise<boolean> {
+  if (refreshPromise) return refreshPromise;
+
+  refreshPromise = (async () => {
+    const refreshToken = getRefreshToken();
+    if (!refreshToken) return false;
+
+    try {
+      const res = await fetch(`${BASE_URL}/auth/refresh`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh_token: refreshToken }),
+        signal: AbortSignal.timeout(30_000),
+      });
+      if (!res.ok) return false;
+
+      const data = (await res.json()) as TokenResponse;
+      setTokens(data.access_token, data.refresh_token);
+      return true;
+    } catch {
+      return false;
+    } finally {
+      refreshPromise = null;
+    }
+  })();
+
+  return refreshPromise;
 }
 
 async function request<T>(
   method: string,
   path: string,
   body?: unknown,
+  retryOnUnauthorized = true,
 ): Promise<T> {
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
+  const isFormData = body instanceof FormData;
+  const headers: Record<string, string> = {};
+  if (!isFormData) {
+    headers["Content-Type"] = "application/json";
+  }
 
-  const token = getToken();
+  const token = getAccessToken();
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
@@ -29,7 +77,7 @@ async function request<T>(
     res = await fetch(`${BASE_URL}${path}`, {
       method,
       headers,
-      body: body ? JSON.stringify(body) : undefined,
+      body: isFormData ? body : body ? JSON.stringify(body) : undefined,
       signal: AbortSignal.timeout(30_000),
     });
   } catch (err) {
@@ -38,8 +86,18 @@ async function request<T>(
   }
 
   if (res.status === 401) {
-    clearToken();
-    window.location.href = "/login";
+    const isAuthEndpoint = path.startsWith("/auth/");
+    if (!isAuthEndpoint && retryOnUnauthorized) {
+      const refreshed = await refreshAccessToken();
+      if (refreshed) {
+        return request<T>(method, path, body, false);
+      }
+    }
+
+    clearTokens();
+    if (!isAuthEndpoint) {
+      redirectToLogin();
+    }
     throw new Error("Sessão expirada — faça login novamente");
   }
 

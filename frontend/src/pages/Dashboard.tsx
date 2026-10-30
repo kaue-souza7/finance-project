@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   AlertCircle,
   ArrowDown,
@@ -22,7 +23,7 @@ function today() {
   return { month: d.getMonth(), year: d.getFullYear() };
 }
 
-let brl = (n: number) =>
+const brl = (n: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
 
 function useMonthlyData(month: number, year: number) {
@@ -247,14 +248,23 @@ export function Dashboard() {
                   Crie um planejamento ou copie os valores do mês anterior para começar.
                 </p>
               </div>
-              <button
-                onClick={() => setShowConfirm(true)}
-                disabled={copying}
-                className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-5 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700 disabled:opacity-50"
-              >
-                <Copy size={16} />
-                Copiar mês anterior
-              </button>
+              <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+                <Link
+                  to="/onboarding"
+                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-5 text-sm font-medium text-white hover:from-indigo-700 hover:to-violet-700"
+                >
+                  <Wallet size={16} />
+                  Criar planejamento
+                </Link>
+                <button
+                  onClick={() => setShowConfirm(true)}
+                  disabled={copying}
+                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg border border-slate-200 px-5 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/50"
+                >
+                  <Copy size={16} />
+                  Copiar mês anterior
+                </button>
+              </div>
             </div>
           </Card>
         </div>

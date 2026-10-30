@@ -2,9 +2,7 @@ import cloudinary.uploader
 import cloudinary.utils
 
 from app.utils.file_validator import (
-    get_extension,
     sanitize_filename,
-    validate_image,
 )
 
 

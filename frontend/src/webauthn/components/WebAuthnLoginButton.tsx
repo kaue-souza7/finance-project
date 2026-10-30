@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Fingerprint, Loader2 } from "lucide-react";
+import type { TokenResponse } from "@/types/finance";
 import { useWebAuthn } from "../hooks/useWebAuthn";
 
 interface WebAuthnLoginButtonProps {
-  onToken: (token: string) => void;
+  onTokens: (tokens: TokenResponse) => void;
 }
 
-export function WebAuthnLoginButton({ onToken }: WebAuthnLoginButtonProps) {
+export function WebAuthnLoginButton({ onTokens }: WebAuthnLoginButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { authenticate } = useWebAuthn();
@@ -15,9 +16,9 @@ export function WebAuthnLoginButton({ onToken }: WebAuthnLoginButtonProps) {
     setLoading(true);
     setError(null);
     try {
-      const token = await authenticate();
-      if (token) {
-        onToken(token);
+      const tokens = await authenticate();
+      if (tokens) {
+        onTokens(tokens);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro na autenticação");

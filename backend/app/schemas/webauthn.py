@@ -1,4 +1,3 @@
-import uuid
 from datetime import datetime
 
 from pydantic import BaseModel, Field
@@ -43,7 +42,9 @@ class WebAuthnLoginCompleteRequest(BaseModel):
 
 class WebAuthnLoginCompleteResponse(BaseModel):
     access_token: str
+    refresh_token: str
     token_type: str = "bearer"
+    expires_in: int
     auth_method: str = "webauthn"
 
 

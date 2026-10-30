@@ -6,6 +6,9 @@ export const categoryApi = {
 
   create: (data: CategoryCreate) => api.post<CategoryResponse>("/categories/", data),
 
+  seedDefaults: () =>
+    api.post<CategoryResponse[]>("/categories/defaults"),
+
   update: (id: string, data: Partial<CategoryCreate>) =>
     api.put<CategoryResponse>(`/categories/${id}`, data),
 

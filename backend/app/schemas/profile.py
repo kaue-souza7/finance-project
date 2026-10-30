@@ -1,4 +1,6 @@
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
+
+from app.schemas.password import Password
 
 
 class AvatarResponse(BaseModel):
@@ -13,27 +15,14 @@ class ProfileResponse(BaseModel):
 
 
 class ProfileUpdate(BaseModel):
-    name: str | None = None
+    name: str | None = Field(default=None, min_length=2, max_length=255)
     email: EmailStr | None = None
 
 
 class PasswordChange(BaseModel):
-    current_password: str
-    new_password: str
+    current_password: str = Field(..., max_length=128)
+    new_password: Password
     confirm_new_password: str
-
-    @field_validator("new_password")
-    @classmethod
-    def validate_new_password(cls, v: str) -> str:
-        if len(v) < 8:
-            raise ValueError("Password must be at least 8 characters")
-        if not any(c.isupper() for c in v):
-            raise ValueError("Password must contain an uppercase letter")
-        if not any(c.islower() for c in v):
-            raise ValueError("Password must contain a lowercase letter")
-        if not any(c.isdigit() for c in v):
-            raise ValueError("Password must contain a digit")
-        return v
 
     @field_validator("confirm_new_password")
     @classmethod

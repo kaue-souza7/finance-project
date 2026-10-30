@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, get_db
-from app.schemas.auth import TokenResponse, UserResponse
+from app.core.rate_limit import limiter
+from app.schemas.auth import UserResponse
 from app.schemas.webauthn import (
     WebAuthnLoginCompleteRequest,
     WebAuthnLoginCompleteResponse,
@@ -36,7 +37,9 @@ def register_complete(
 
 
 @router.post("/login/start", response_model=WebAuthnLoginStartResponse)
+@limiter.limit("20/minute")
 def login_start(
+    request: Request,
     db: Session = Depends(get_db),
 ):
     service = WebAuthnService(db)
@@ -44,12 +47,16 @@ def login_start(
 
 
 @router.post("/login/complete", response_model=WebAuthnLoginCompleteResponse)
+@limiter.limit("20/minute")
 def login_complete(
+    request: Request,
     data: WebAuthnLoginCompleteRequest,
     db: Session = Depends(get_db),
 ):
     service = WebAuthnService(db)
-    return service.verify_authentication(data.model_dump())
+    user_agent = request.headers.get("user-agent")
+    ip_address = request.client.host if request.client else None
+    return service.verify_authentication(data.model_dump(), user_agent, ip_address)
 
 
 @router.get("/credentials")

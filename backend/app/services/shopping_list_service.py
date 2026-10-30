@@ -5,7 +5,6 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.models.shopping_list import ShoppingList
-from app.models.shopping_list_item import ShoppingListItem
 from app.repositories.shopping_list_repository import ShoppingListRepository
 from app.repositories.shopping_list_item_repository import (
     ShoppingListItemRepository,
@@ -302,7 +301,6 @@ class ShoppingListService:
         oid = uuid.UUID(owner_id)
 
         self._assert_owner(list_id, owner_id)
-        shopping_list = self.list_repo.get_by_id(self.db, lid)
 
         receiver = self.user_repo.get_by_email(self.db, email)
         if not receiver:
