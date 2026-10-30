@@ -113,6 +113,18 @@ def create_app() -> FastAPI:
         except Exception:
             logger.exception("Falha ao finalizar scheduler")
 
+    @app.middleware("http")
+    async def log_method_not_allowed(request: Request, call_next):
+        response = await call_next(request)
+        if response.status_code == 405:
+            logger.warning(
+                "HTTP 405: %s %s origin=%s",
+                request.method,
+                request.url.path,
+                request.headers.get("origin", "-"),
+            )
+        return response
+
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins_list,
