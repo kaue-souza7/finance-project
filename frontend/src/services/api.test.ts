@@ -41,4 +41,17 @@ describe("api refresh flow", () => {
     expect(getAccessToken()).toBe("access-novo");
     expect(getRefreshToken()).toBe("refresh-novo");
   });
+
+  it("não classifica erro interno como falha de rede", async () => {
+    setTokens("access-valido", "refresh-valido");
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(new Response(null, { status: 500 })),
+    );
+
+    await expect(api.get("/plannings/")).rejects.toThrow(
+      "Serviço temporariamente indisponível",
+    );
+  });
 });

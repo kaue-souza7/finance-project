@@ -112,6 +112,13 @@ async function request<T>(
     throw new Error("Muitas tentativas. Aguarde alguns minutos e tente novamente.");
   }
 
+  if (res.status >= 500) {
+    console.error("[api] server", method, path, res.status);
+    throw new Error(
+      "Serviço temporariamente indisponível. Tente novamente em instantes.",
+    );
+  }
+
   const text = await res.text();
   let data: Record<string, unknown> | null = null;
   if (text) {

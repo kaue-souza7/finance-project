@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from app.core.cloudinary import configure_cloudinary
 from app.core.config import settings
@@ -48,6 +49,26 @@ def create_app() -> FastAPI:
 
     configure_cloudinary()
 
+    @app.exception_handler(IntegrityError)
+    async def integrity_exception_handler(request: Request, exc: IntegrityError):
+        logger.warning(
+            "Violação de integridade: %s %s", request.method, request.url.path
+        )
+        return JSONResponse(
+            status_code=409,
+            content={"detail": "Conflito ao salvar os dados"},
+        )
+
+    @app.exception_handler(SQLAlchemyError)
+    async def database_exception_handler(request: Request, exc: SQLAlchemyError):
+        logger.exception(
+            "Erro de banco nao tratado: %s %s", request.method, request.url.path
+        )
+        return JSONResponse(
+            status_code=503,
+            content={"detail": "Serviço temporariamente indisponível"},
+        )
+
     @app.exception_handler(Exception)
     async def unhandled_exception_handler(request: Request, exc: Exception):
         logger.exception(
@@ -60,6 +81,15 @@ def create_app() -> FastAPI:
 
     @app.on_event("startup")
     def on_startup():
+        if settings.RUN_MIGRATIONS_ON_STARTUP:
+            try:
+                from app.core.migrations import run_migrations
+
+                run_migrations()
+            except Exception:
+                logger.exception("Falha ao aplicar migrations no startup")
+                raise
+
         try:
             from app.database.session import warm_up_pool
 

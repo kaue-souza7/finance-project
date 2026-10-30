@@ -3,6 +3,7 @@ import uuid
 from datetime import datetime, timezone
 
 os.environ["RATE_LIMIT_ENABLED"] = "false"
+os.environ["RUN_MIGRATIONS_ON_STARTUP"] = "false"
 
 import pytest
 from fastapi import FastAPI

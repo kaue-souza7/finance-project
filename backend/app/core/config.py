@@ -5,6 +5,9 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     DATABASE_URL: str = "postgresql+psycopg://postgres:postgres@localhost:5432/finance_db"
+    # Opcional: conexão direta (sem pooler) usada apenas por migrations.
+    DIRECT_DATABASE_URL: str = ""
+    RUN_MIGRATIONS_ON_STARTUP: bool = True
     SECRET_KEY: str = "change-this-to-a-random-secret-key"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
@@ -27,12 +30,21 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     RATE_LIMIT_ENABLED: bool = True
 
+    @staticmethod
+    def _normalize_database_url(url: str) -> str:
+        if url.startswith("postgres://"):
+            return url.replace("postgres://", "postgresql+psycopg://", 1)
+        return url
+
     @property
     def database_url_normalized(self) -> str:
-        url = self.DATABASE_URL
-        if url.startswith("postgres://"):
-            url = url.replace("postgres://", "postgresql+psycopg://", 1)
-        return url
+        return self._normalize_database_url(self.DATABASE_URL)
+
+    @property
+    def migration_database_url(self) -> str:
+        return self._normalize_database_url(
+            self.DIRECT_DATABASE_URL or self.DATABASE_URL
+        )
 
     @property
     def cors_origins_list(self) -> list[str]:

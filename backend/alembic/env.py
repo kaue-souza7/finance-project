@@ -1,13 +1,18 @@
+import sys
 from logging.config import fileConfig
+from pathlib import Path
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from app.core.config import settings
-from app.database.session import Base
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+import app.models  # noqa: E402,F401  # registra todos os models no metadata
+from app.core.config import settings  # noqa: E402
+from app.database.session import Base  # noqa: E402
 
 config = context.config
-config.set_main_option("sqlalchemy.url", settings.database_url_normalized)
+config.set_main_option("sqlalchemy.url", settings.migration_database_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
@@ -22,6 +27,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        compare_type=True,
     )
     with context.begin_transaction():
         context.run_migrations()
@@ -34,7 +40,11 @@ def run_migrations_online() -> None:
         poolclass=pool.NullPool,
     )
     with connectable.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata)
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+            compare_type=True,
+        )
         with context.begin_transaction():
             context.run_migrations()
 

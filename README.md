@@ -91,6 +91,11 @@ Configure as variáveis `SMTP_*` no `backend/.env` para envio real de e-mail.
 Sem SMTP, o endpoint continua respondendo de forma genérica e o link é apenas
 registrado no log quando `DEBUG=true`.
 
+## Deploy
+
+O deploy no Render está documentado em [DEPLOY.md](DEPLOY.md), incluindo
+migrations, health check, pre-deploy e variáveis de ambiente.
+
 ## Segurança
 
 Nunca commite credenciais reais. Leia [SECURITY.md](SECURITY.md) antes de
