@@ -15,7 +15,41 @@ type TokenResponse = {
   expires_in: number;
 };
 
+const CREDENTIAL_PATHS = new Set([
+  "/auth/login",
+  "/auth/register",
+  "/auth/forgot-password",
+  "/auth/reset-password",
+]);
+
 let refreshPromise: Promise<boolean> | null = null;
+
+function isCredentialPath(path: string): boolean {
+  return CREDENTIAL_PATHS.has(path) || path.startsWith("/auth/webauthn/");
+}
+
+function extractDetail(data: Record<string, unknown> | null): string | null {
+  const detail = data?.detail;
+  if (typeof detail === "string") return detail;
+  if (Array.isArray(detail)) {
+    const joined = (detail as Array<Record<string, unknown>>)
+      .map((e) => String(e.msg ?? ""))
+      .filter(Boolean)
+      .join("; ");
+    return joined || null;
+  }
+  return null;
+}
+
+async function readErrorDetail(res: Response): Promise<string | null> {
+  const text = await res.text();
+  if (!text) return null;
+  try {
+    return extractDetail(JSON.parse(text) as Record<string, unknown>);
+  } catch {
+    return null;
+  }
+}
 
 function redirectToLogin(): void {
   const returnTo = `${window.location.pathname}${window.location.search}`;
@@ -91,6 +125,12 @@ async function request<T>(
   }
 
   if (res.status === 401) {
+    // Login/cadastro/reset: o 401 é credencial inválida, não sessão expirada.
+    if (isCredentialPath(path)) {
+      const detail = await readErrorDetail(res);
+      throw new Error(detail ?? "E-mail ou senha inválidos");
+    }
+
     const isAuthEndpoint = path.startsWith("/auth/");
     if (!isAuthEndpoint && retryOnUnauthorized) {
       const refreshed = await refreshAccessToken();
@@ -126,17 +166,8 @@ async function request<T>(
   }
 
   if (!res.ok) {
-    const detail = data?.detail;
-    if (typeof detail === "string") {
-      throw new Error(detail);
-    }
-    if (Array.isArray(detail)) {
-      const joined = (detail as Array<Record<string, unknown>>)
-        .map((e) => String(e.msg ?? ""))
-        .filter(Boolean)
-        .join("; ");
-      if (joined) throw new Error(joined);
-    }
+    const detail = extractDetail(data);
+    if (detail) throw new Error(detail);
     throw new Error(`HTTP ${res.status}`);
   }
 

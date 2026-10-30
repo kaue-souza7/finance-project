@@ -42,6 +42,25 @@ describe("api refresh flow", () => {
     expect(getRefreshToken()).toBe("refresh-novo");
   });
 
+  it("preserva a mensagem real de credenciais inválidas no login", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ detail: "E-mail ou senha inválidos" }), {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        }),
+      ),
+    );
+
+    await expect(
+      api.post("/auth/login", {
+        email: "user@test.com",
+        password: "WrongPass1",
+      }),
+    ).rejects.toThrow("E-mail ou senha inválidos");
+  });
+
   it("não classifica erro interno como falha de rede", async () => {
     setTokens("access-valido", "refresh-valido");
     vi.spyOn(console, "error").mockImplementation(() => {});
