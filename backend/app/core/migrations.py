@@ -68,7 +68,13 @@ def run_migrations() -> None:
             logger.info("Migrations aplicadas com sucesso até %s", head)
         finally:
             if is_postgres:
-                connection.execute(
-                    text("SELECT pg_advisory_unlock(:key)"),
-                    {"key": MIGRATION_LOCK_ID},
-                )
+                try:
+                    connection.execute(
+                        text("SELECT pg_advisory_unlock(:key)"),
+                        {"key": MIGRATION_LOCK_ID},
+                    )
+                except Exception:
+                    logger.warning(
+                        "Não foi possível liberar o advisory lock de migrations",
+                        exc_info=True,
+                    )
