@@ -29,7 +29,7 @@ function redirectToLogin(): void {
 async function refreshAccessToken(): Promise<boolean> {
   if (refreshPromise) return refreshPromise;
 
-  refreshPromise = (async () => {
+  const promise = (async () => {
     const refreshToken = getRefreshToken();
     if (!refreshToken) return false;
 
@@ -47,12 +47,17 @@ async function refreshAccessToken(): Promise<boolean> {
       return true;
     } catch {
       return false;
-    } finally {
-      refreshPromise = null;
     }
   })();
 
-  return refreshPromise;
+  refreshPromise = promise;
+  void promise.finally(() => {
+    if (refreshPromise === promise) {
+      refreshPromise = null;
+    }
+  });
+
+  return promise;
 }
 
 async function request<T>(
