@@ -42,6 +42,8 @@ O arquivo `replacements.txt` deve conter as credenciais no formato
   e são rotacionados a cada uso.
 - Troca de senha e reset revogam todos os refresh tokens do usuário.
 - Rate limiting é aplicado nos endpoints de login, cadastro e recuperação de senha.
+  O storage padrão é em memória, por processo. Em produção com múltiplos workers,
+  configure um storage compartilhado (por exemplo, Redis) no `Limiter`.
 
 ## Reportar vulnerabilidades
 

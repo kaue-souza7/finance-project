@@ -103,6 +103,10 @@ async function request<T>(
 
   if (res.status === 204) return undefined as T;
 
+  if (res.status === 429) {
+    throw new Error("Muitas tentativas. Aguarde alguns minutos e tente novamente.");
+  }
+
   const text = await res.text();
   let data: Record<string, unknown> | null = null;
   if (text) {

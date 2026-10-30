@@ -70,6 +70,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = useCallback(async () => {
     const refreshToken = getRefreshToken();
+    clearTokens();
+    setUser(null);
+
     if (refreshToken) {
       try {
         await api.post<void>("/auth/logout", { refresh_token: refreshToken });
@@ -77,8 +80,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // O logout local deve funcionar mesmo se o servidor estiver indisponível.
       }
     }
-    clearTokens();
-    setUser(null);
   }, []);
 
   return (
