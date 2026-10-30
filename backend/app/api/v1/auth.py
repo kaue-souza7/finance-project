@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, get_db
 from app.core.config import settings
-from app.core.rate_limit import limiter
+from app.core.rate_limit import limiter, rate_limit_key
 from app.schemas.auth import (
     ForgotPasswordRequest,
     LoginRequest,
@@ -21,8 +21,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 def _client_info(request: Request) -> tuple[str | None, str | None]:
     user_agent = request.headers.get("user-agent")
-    ip_address = request.client.host if request.client else None
-    return user_agent, ip_address
+    return user_agent, rate_limit_key(request)
 
 
 @router.post("/register", response_model=TokenResponse, status_code=201)
