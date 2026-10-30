@@ -37,6 +37,7 @@ class RefreshTokenRepository:
                 RefreshToken.revoked_at.is_(None),
                 RefreshToken.expires_at > now,
             )
+            .with_for_update()
             .first()
         )
 
