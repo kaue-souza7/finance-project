@@ -99,3 +99,17 @@ O script **não altera a senha**: cria um token de uso único com validade de 30
 minutos. A pessoa escolhe a nova senha na página `/reset-password` do frontend.
 O token não deve ser compartilhado em logs, issues ou capturas de tela.
 
+## Conferir se a senha atual corresponde ao hash
+
+Sem alterar nada e sem enviar a senha pela rede:
+
+```bash
+cd backend
+python -m scripts.check_password usuario@exemplo.com
+```
+
+O comando pede a senha no terminal (sem exibir) e imprime apenas
+`password_matches: true/false`. Se der `false`, o hash do banco não corresponde
+àquela senha; se der `true`, o problema está no payload/ambiente usado pelo
+frontend, não na credencial.
+
