@@ -82,3 +82,20 @@ python -m scripts.migrate
 
 Não rode `alembic upgrade head` apontando para um banco diferente do que o
 Render usa. Confirme o host do `DATABASE_URL` antes.
+
+## Recuperação de senha sem SMTP
+
+Se o login retornar 401 porque a senha não confere e o SMTP ainda não estiver
+configurado, gere um link de recuperação localmente apontando para o banco de
+produção:
+
+```bash
+cd backend
+python -m scripts.create_password_reset_link usuario@exemplo.com \
+  --frontend-url https://seu-frontend
+```
+
+O script **não altera a senha**: cria um token de uso único com validade de 30
+minutos. A pessoa escolhe a nova senha na página `/reset-password` do frontend.
+O token não deve ser compartilhado em logs, issues ou capturas de tela.
+

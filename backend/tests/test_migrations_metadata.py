@@ -16,6 +16,8 @@ def test_all_auth_tables_are_registered_in_metadata():
     table_names = set(Base.metadata.tables)
     assert "refresh_tokens" in table_names
     assert "password_reset_tokens" in table_names
+    assert "webauthn_credentials" in table_names
+    assert "webauthn_challenges" in table_names
 
 
 def test_alembic_head_contains_the_auth_migration():

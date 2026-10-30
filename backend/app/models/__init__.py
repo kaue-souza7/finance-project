@@ -17,6 +17,7 @@ from app.models.shopping_list_invite import ShoppingListInvite
 from app.models.shopping_list_share import ShoppingListShare
 from app.models.refresh_token import RefreshToken
 from app.models.password_reset_token import PasswordResetToken
+from app.models.webauthn import WebAuthnChallenge, WebAuthnCredential
 
 __all__ = [
     "User",
@@ -38,4 +39,6 @@ __all__ = [
     "ShoppingListShare",
     "RefreshToken",
     "PasswordResetToken",
+    "WebAuthnChallenge",
+    "WebAuthnCredential",
 ]
