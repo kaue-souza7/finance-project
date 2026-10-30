@@ -1,3 +1,4 @@
+import logging
 from urllib.parse import parse_qs, urlparse
 from unittest.mock import patch
 
@@ -119,6 +120,30 @@ def test_password_reset_flow(client: TestClient):
 
     # O reset revoga as sessões antigas.
     assert client.post(REFRESH, json={"refresh_token": old_refresh}).status_code == 401
+
+
+def test_login_unknown_email_logs_reason_without_pii(client: TestClient, caplog):
+    with caplog.at_level(logging.INFO):
+        response = client.post(
+            LOGIN,
+            json={"email": "nobody@test.com", "password": "WrongPass1"},
+        )
+    assert response.status_code == 401
+    assert "usuário não encontrado" in caplog.text
+    assert "nobody@test.com" not in caplog.text
+
+
+def test_login_wrong_password_logs_reason_without_pii(
+    client: TestClient, owner, caplog
+):
+    with caplog.at_level(logging.INFO):
+        response = client.post(
+            LOGIN,
+            json={"email": owner.email, "password": "WrongPass1"},
+        )
+    assert response.status_code == 401
+    assert "senha inválida" in caplog.text
+    assert owner.email not in caplog.text
 
 
 def test_forgot_password_does_not_reveal_unknown_email(client: TestClient):

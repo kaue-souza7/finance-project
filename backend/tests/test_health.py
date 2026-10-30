@@ -39,5 +39,6 @@ def test_diagnostics_do_not_expose_pii(client: TestClient, owner):
     assert data["status"] == "ok"
     assert data["database"] == "ok"
     assert data["has_users"] is True
+    assert data["users_count"] >= 1
     assert "email" not in data
     assert "user_id" not in data

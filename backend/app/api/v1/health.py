@@ -45,7 +45,7 @@ def diagnostics(db: Session = Depends(get_db)):
     """Diagnóstico seguro: sem PII, sem credenciais e sem tokens."""
     _check_database(db)
     revision = None
-    has_users = False
+    users_count = 0
     try:
         revision = db.execute(
             text("SELECT version_num FROM alembic_version LIMIT 1")
@@ -53,8 +53,8 @@ def diagnostics(db: Session = Depends(get_db)):
     except Exception:
         logger.warning("Diagnóstico: alembic_version indisponível")
     try:
-        has_users = bool(
-            db.execute(text("SELECT EXISTS(SELECT 1 FROM users)")).scalar()
+        users_count = int(
+            db.execute(text("SELECT count(*) FROM users")).scalar() or 0
         )
     except Exception:
         logger.warning("Diagnóstico: tabela users indisponível")
@@ -62,5 +62,6 @@ def diagnostics(db: Session = Depends(get_db)):
         "status": "ok",
         "database": "ok",
         "alembic_revision": revision,
-        "has_users": has_users,
+        "has_users": users_count > 0,
+        "users_count": users_count,
     }

@@ -1,3 +1,5 @@
+import hashlib
+import logging
 import uuid
 from datetime import datetime, timedelta, timezone
 
@@ -25,6 +27,12 @@ from app.schemas.auth import (
     UserResponse,
 )
 from app.services.token_service import TokenService, TokenPair
+
+logger = logging.getLogger(__name__)
+
+
+def _email_fingerprint(email: str) -> str:
+    return hashlib.sha256(email.strip().lower().encode("utf-8")).hexdigest()[:12]
 
 
 def _to_response(pair: TokenPair) -> TokenResponse:
@@ -84,7 +92,21 @@ class AuthService:
         ip_address: str | None = None,
     ) -> TokenResponse:
         user = self.repo.get_by_email(self.db, data.email)
-        if not user or not verify_password(data.password, user.hashed_password):
+        if not user:
+            logger.info(
+                "Login falhou: usuário não encontrado (email_hash=%s)",
+                _email_fingerprint(str(data.email)),
+            )
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="E-mail ou senha inválidos",
+            )
+
+        if not verify_password(data.password, user.hashed_password):
+            logger.info(
+                "Login falhou: senha inválida (email_hash=%s)",
+                _email_fingerprint(str(data.email)),
+            )
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="E-mail ou senha inválidos",
