@@ -35,6 +35,12 @@ from app.api.v1.shopping_list_shares import (
 from app.api.v1.users import router as users_router
 from app.api.v1.quotes import router as quotes_router
 from app.api.v1.webauthn import router as webauthn_router
+from app.api.v1.additional_organizations import (
+    router as additional_organizations_router,
+)
+from app.api.v1.additional_organization_sharing import (
+    router as additional_organization_sharing_router,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -152,6 +158,10 @@ def create_app() -> FastAPI:
     app.include_router(shopping_list_shares_router, prefix="/api/v1")
     app.include_router(users_router, prefix="/api/v1")
     app.include_router(webauthn_router, prefix="/api/v1")
+    app.include_router(
+        additional_organization_sharing_router, prefix="/api/v1"
+    )
+    app.include_router(additional_organizations_router, prefix="/api/v1")
     app.include_router(quotes_router)
 
     return app

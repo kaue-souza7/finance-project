@@ -1,5 +1,10 @@
 import { type FormEvent, useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import {
+  Link,
+  Navigate,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import logoSrc from "@/assets/logo/finance-logo.png";
@@ -7,6 +12,20 @@ import logoSrc from "@/assets/logo/finance-logo.png";
 export function Register() {
   const { register, isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const returnToParam = searchParams.get("returnTo");
+  const returnTo =
+    returnToParam &&
+    returnToParam.startsWith("/") &&
+    !returnToParam.startsWith("//")
+      ? returnToParam
+      : "/onboarding";
+  const loginTo =
+    returnToParam &&
+    returnToParam.startsWith("/") &&
+    !returnToParam.startsWith("//")
+      ? `/login?returnTo=${encodeURIComponent(returnTo)}`
+      : "/login";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,7 +72,7 @@ export function Register() {
     setError(null);
     try {
       await register({ name: name.trim(), email: email.trim(), password });
-      navigate("/onboarding", { replace: true });
+      navigate(returnTo, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao cadastrar");
     } finally {
@@ -202,7 +221,7 @@ export function Register() {
           <p className="mt-7 text-center text-sm text-slate-500 dark:text-slate-400">
             Já tem conta?{" "}
             <Link
-              to="/login"
+              to={loginTo}
               className="font-semibold text-indigo-600 underline-offset-2 transition-colors hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
             >
               Faça login

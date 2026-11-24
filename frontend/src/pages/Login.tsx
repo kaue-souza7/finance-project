@@ -14,6 +14,12 @@ export function Login() {
     returnToParam && returnToParam.startsWith("/") && !returnToParam.startsWith("//")
       ? returnToParam
       : "/";
+  const registerTo =
+    returnToParam &&
+    returnToParam.startsWith("/") &&
+    !returnToParam.startsWith("//")
+      ? `/register?returnTo=${encodeURIComponent(returnTo)}`
+      : "/register";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -189,7 +195,7 @@ export function Login() {
           <p className="mt-7 text-center text-sm text-slate-500 dark:text-slate-400">
             Não tem conta?{" "}
             <Link
-              to="/register"
+              to={registerTo}
               className="font-semibold text-indigo-600 underline-offset-2 transition-colors hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
             >
               Cadastre-se

@@ -1,4 +1,4 @@
-import { ClipboardCheck, MessageSquareText, Plane } from "lucide-react";
+import { ClipboardCheck, MessageSquareText, Plane, Wallet } from "lucide-react";
 import { ModuleCube } from "@/components/ModuleCube";
 import { ModuleCubeProvider } from "@/components/ModuleCubeContext";
 
@@ -26,6 +26,14 @@ const modules = [
       "Crie e gerencie listas de compras do mercado.",
     comingSoon: false,
     to: "/checklist",
+  },
+  {
+    icon: Wallet,
+    title: "Organização Adicional",
+    description:
+      "Organize receitas extras, como 13º e férias, e anotações livres.",
+    comingSoon: false,
+    to: "/organizacao-adicional",
   },
 ];
 

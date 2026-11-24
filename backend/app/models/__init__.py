@@ -18,6 +18,16 @@ from app.models.shopping_list_share import ShoppingListShare
 from app.models.refresh_token import RefreshToken
 from app.models.password_reset_token import PasswordResetToken
 from app.models.webauthn import WebAuthnChallenge, WebAuthnCredential
+from app.models.additional_organization import AdditionalOrganization
+from app.models.additional_organization_item import (
+    AdditionalOrganizationItem,
+)
+from app.models.additional_organization_member import (
+    AdditionalOrganizationMember,
+)
+from app.models.additional_organization_invite import (
+    AdditionalOrganizationInvite,
+)
 
 __all__ = [
     "User",
@@ -41,4 +51,8 @@ __all__ = [
     "PasswordResetToken",
     "WebAuthnChallenge",
     "WebAuthnCredential",
+    "AdditionalOrganization",
+    "AdditionalOrganizationItem",
+    "AdditionalOrganizationMember",
+    "AdditionalOrganizationInvite",
 ]

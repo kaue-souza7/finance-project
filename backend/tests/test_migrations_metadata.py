@@ -18,15 +18,19 @@ def test_all_auth_tables_are_registered_in_metadata():
     assert "password_reset_tokens" in table_names
     assert "webauthn_credentials" in table_names
     assert "webauthn_challenges" in table_names
+    assert "additional_organizations" in table_names
+    assert "additional_organization_items" in table_names
+    assert "additional_organization_members" in table_names
+    assert "additional_organization_invites" in table_names
 
 
 def test_alembic_head_contains_the_auth_migration():
     config = Config("alembic.ini")
     script = ScriptDirectory.from_config(config)
-    assert script.get_current_head() == "0016"
-    revision = script.get_revision("0016")
+    assert script.get_current_head() == "0018"
+    revision = script.get_revision("0018")
     assert revision is not None
-    assert revision.down_revision == "0015"
+    assert revision.down_revision == "0017"
 
 
 def test_database_url_normalization_for_alembic():

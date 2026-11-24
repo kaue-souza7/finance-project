@@ -88,6 +88,22 @@ class User(Base):
     password_reset_tokens = relationship(
         "PasswordResetToken", back_populates="user", cascade="all, delete-orphan"
     )
+    additional_organizations = relationship(
+        "AdditionalOrganization", back_populates="user"
+    )
+    additional_organization_memberships = relationship(
+        "AdditionalOrganizationMember", back_populates="user"
+    )
+    sent_additional_organization_invites = relationship(
+        "AdditionalOrganizationInvite",
+        foreign_keys="AdditionalOrganizationInvite.sender_id",
+        back_populates="sender",
+    )
+    received_additional_organization_invites = relationship(
+        "AdditionalOrganizationInvite",
+        foreign_keys="AdditionalOrganizationInvite.receiver_user_id",
+        back_populates="receiver",
+    )
 
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

@@ -24,6 +24,16 @@ const CREDENTIAL_PATHS = new Set([
 
 let refreshPromise: Promise<boolean> | null = null;
 
+export class ApiError extends Error {
+  status: number;
+
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.name = "ApiError";
+    this.status = statusCode;
+  }
+}
+
 function isCredentialPath(path: string): boolean {
   return CREDENTIAL_PATHS.has(path) || path.startsWith("/auth/webauthn/");
 }
@@ -171,8 +181,8 @@ async function request<T>(
 
   if (!res.ok) {
     const detail = extractDetail(data);
-    if (detail) throw new Error(detail);
-    throw new Error(`HTTP ${res.status}`);
+    if (detail) throw new ApiError(detail, res.status);
+    throw new ApiError(`HTTP ${res.status}`, res.status);
   }
 
   return data as T;

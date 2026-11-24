@@ -24,6 +24,9 @@ const Chat = lazy(() => import("@/pages/Chat").then((m) => ({ default: m.Chat })
 const ChatDetail = lazy(() => import("@/pages/ChatDetail").then((m) => ({ default: m.ChatDetail })));
 const ShoppingLists = lazy(() => import("@/pages/ShoppingLists").then((m) => ({ default: m.ShoppingLists })));
 const ShoppingListDetail = lazy(() => import("@/pages/ShoppingListDetail").then((m) => ({ default: m.ShoppingListDetail })));
+const AdditionalOrganizations = lazy(() => import("@/pages/AdditionalOrganizations").then((m) => ({ default: m.AdditionalOrganizations })));
+const AdditionalOrganizationDetail = lazy(() => import("@/pages/AdditionalOrganizationDetail").then((m) => ({ default: m.AdditionalOrganizationDetail })));
+const AdditionalOrganizationInvite = lazy(() => import("@/pages/AdditionalOrganizationInvite").then((m) => ({ default: m.AdditionalOrganizationInvite })));
 const Onboarding = lazy(() => import("@/pages/Onboarding").then((m) => ({ default: m.Onboarding })));
 const ForgotPassword = lazy(() => import("@/pages/ForgotPassword").then((m) => ({ default: m.ForgotPassword })));
 const ResetPassword = lazy(() => import("@/pages/ResetPassword").then((m) => ({ default: m.ResetPassword })));
@@ -60,6 +63,9 @@ export const routes: RouteObject[] = [
       { path: "chat/:id", element: <ChatDetail /> },
       { path: "checklist", element: <ShoppingLists /> },
       { path: "checklist/:id", element: <ShoppingListDetail /> },
+      { path: "organizacao-adicional", element: <AdditionalOrganizations /> },
+      { path: "organizacao-adicional/convite", element: <AdditionalOrganizationInvite /> },
+      { path: "organizacao-adicional/:id", element: <AdditionalOrganizationDetail /> },
       { path: "onboarding", element: <Onboarding /> },
     ],
   },

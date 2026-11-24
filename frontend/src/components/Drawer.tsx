@@ -120,6 +120,22 @@ export function Drawer({ open, onClose }: DrawerProps) {
                 Simulador de Metas
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="/organizacao-adicional"
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `flex min-h-[44px] items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white"
+                      : "text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                  }`
+                }
+              >
+                <Wallet size={20} />
+                Organização Adicional
+              </NavLink>
+            </li>
             {secondaryLinks.map((link) => (
               <li key={link.to}>
                 <NavLink
